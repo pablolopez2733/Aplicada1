@@ -26,16 +26,13 @@ media.truncada <- function(x,alpha)
   }
   n_alpha <- length(vr)
   mtrunc <- (1/n_alpha)*(sum(vr))
-  
+  return(mtrunc)
 }
 
 
-for (obs in x)
-{
-  statement
-}
-
-
+#Prueba:
+mean(c(1.7,1.8,1.67,1.5,1.87,1.93),trim = 0.2)
+media.truncada(c(1.7,1.8,1.67,1.5,1.87,1.93),0.2)
 
 #3 funcion que devuelve el j-ésimo estadístico de orden
 jesimo.dato <- function(x,j)

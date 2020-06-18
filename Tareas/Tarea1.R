@@ -6,7 +6,7 @@ kesimo.momento <- function(x, k)
   xbarra <- mean(x)
   suma <- sum((x)^k)
   
-  momentok <- 1/(sigma_x^k*n_x)*suma
+  momentok <- 1/(n_x)*suma
   return(momentok)
   }
 

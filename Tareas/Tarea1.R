@@ -10,7 +10,30 @@ kesimo.momento <- function(x, k)
   return(momentok)
   }
 
-#2
+#2 Función que devuelve la media de los datos entre el cuantil 1 y 1-alpha
+media.truncada <- function(x,alpha)
+{
+  vr<- c()
+  q1<-quantile(x,alpha/2)
+  q2<-quantile(x,(1-alpha/2))
+  #iterar por todo el vector y crear un nuevo vector con los vectores que cumplan
+  for (v in x)
+  {
+    if(q1<=v & v<=q2 )
+    {
+      vr <- c(vr,v)
+    }
+  }
+  n_alpha <- length(vr)
+  mtrunc <- (1/n_alpha)*(sum(vr))
+  
+}
+
+
+for (obs in x)
+{
+  statement
+}
 
 
 

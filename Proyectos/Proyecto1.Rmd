@@ -1,0 +1,84 @@
+<center> <h1>Proyecto 1</h1> </center>
+<br>
+<center> <h3>Fernando Stein Vallarta 165455</h3> </center>
+<center> <h3>Pablo López Landeros 178863</h3> </center>
+<center> <h3>Manuel García Garduño 162136</h3> </center>
+<br>
+
+## Introducción:    
+Para el proyecto utilizamos la base de datos de Servicio Línea de Mujeres que se
+encuentra disponible en la página de datos abiertos de la CDMX. En esta base
+de datos podemos encontrar la información de las llamadas realizadas al servicio
+Línea de Mujeres de LOCATEL desde noviembre de 2016. Sin embargo, para
+este proyecto únicamente consideramos los datos del año 2020.   
+
+La captura de la información se realiza a través de lo que el gobierno de la
+CDMX ha denominado Sistema de Registro de Información de Locatel (SIRILO). Cabe resaltar que la información obtenida es otorgada de forma opcional
+por las mujeres que llaman y requiere del consentimiento de las usuarias para
+ser difundida.   
+
+Para obtener la información, las operadoras realizan una entrevista a las
+mujeres que se comunican al servicio de asesorías. La atención que brindan las
+operadoras depende del motivo de la llamada ya que este permite a la operadora
+elaborar un plan de acción. Cabe resaltar que la información obtenida es otorgada de forma voluntaria por las mujeres que llaman y requiere del consentimiento
+de las usuarias para ser difundida.     
+
+En esta base podrás encontrar toda la información de las llamadas realizadas
+al servicio Línea de Mujeres de LOCATEL desde noviembre de 2016. Esta
+información se actualizará semanalmente a partir del 6 de abril de 2020
+La Línea mujeres brinda atención enfocada a las mujeres que sufren de violencia, inequidad y desigualdad de género en los siguientes rubros:   
+
+1. Información sobre programas y acciones del gobierno de la CDMX
+2. Asesoría psicológica
+3. Asesoría Jurídica
+4. Orientación médica   
+
+## Descripción de los datos
+
+Para realizar una breve descripción de los datos, empleamos el diccionario proporcionado por la página de datos abiertos de la CDMX. Observamos que la base de datos se compone de la siguiente forma:    
+
+”INSERTAR TABLA 1”
+Ahora bien, en el presente proyecto buscamos estudiar múltiples situaciones
+que rodean a la realidad de discriminación por género en la CDMX.   
+
+En primer lugar, nos gustaría analizar si desde la cuarentena ha existido
+un incremento en las llamadas realizadas a la Línea Mujeres. La Jornada Nacional de Sana Distancia (JNSD), o cuarentena comenzó el 23 de marzo del presente año. Luego entonces, construimos un histograma en donde observamos
+el número de llamadas por mes, contemplando que los meses de cuarentena son
+abril, mayo y algunos días de marzo y junio:   
+
+”INSERTAR GRAFICA 1”
+
+En la anterior gráfica notamos que para los meses de abril, mayo y junio
+no se nota un aumento en el número de llamadas, de hecho, las llamadas han
+disminuido. Sin embargo, el mes de junio aún no ha concluido, de ahí que la
+gráfica anterior no parece ser contundente.   
+
+Ahora bien, en busca de un resultado más claro sobre si existe un aumento
+en las llamadas a la línea mujeres a partir del cuarentena realizamos otra gráfica,
+ahora de líneas. En esta gráfica es más clara la tendencia a la baja a raíz del
+comienzo de la cuarentena.   
+
+”INSERTAR GRAFICA 2” ´
+
+De igual forma, nos gustar´ıa realizar un análisis por edad. En primera
+instancia, calculamos algunas estadísticas de resumen de la variable edad como
+su: desviación media absoluta, media, mediana, rango intercuartilico y varianza.   
+
+”INSERTAR TABLA 2”
+
+Con los anteriores resultados observamos que el promedio de edad esta
+alrededor de los 43 años, que el 50% de la población es menor a los 42 años, que,
+en promedio, el resto de las personas están a 14 años de 42 años, y que el 50%
+de la población centrada se encuentra en el intervalo [23, 61] años, y finalmente
+la variabilidad de las edades es mayor a 192.
+Si quisiéramos representar lo anterior en una gráfica, podemos usar una
+gráfica de barras.   
+
+”INSERTAR GRAFICA 3” 
+
+En la anterior gráfica, observamos que la distribución de las edades pareciera
+ser normal. De ahí que decidimos realizar un diagrama de densidad que valida
+nuestra hipótesis de normalidad, a pesar de tener algunos picos.   
+
+”INSERTAR GRAFICA 4” 
+

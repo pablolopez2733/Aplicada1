@@ -13,12 +13,12 @@ library(ggplot2)
 ###############
 
 #Utilizamos la base de datos otorgada
-datos.barras <- data.frame(Pais = c("EEUU","Canadá","México"), PIB = c(20.54, 17.13, 1.21))
+datos.barras <- data.frame(Pais = c("EEUU","Canada","Mexico"), PIB = c(20.54, 17.13, 1.21))
 
 #Construimos Grafica de Barras
 ggplot(datos.barras) + 
   geom_col(aes(x = Pais, y = PIB, fill = Pais)) +
-  scale_fill_manual(values = c("#0087AF", "#B22222", "#228B22") + 
+  scale_fill_manual(values = c("#0087AF", "#B22222", "#228B22")) + 
   theme(
     axis.title.x = element_text("bold"),       # Bold x axis
     axis.title.y = element_text("bold"),       # Bold y axis
@@ -29,18 +29,18 @@ ggplot(datos.barras) +
 ###############
 
 #Utilizamos la base de datos otorgada 
-x <- seq(-2*pi, 2*pi, length.out = 100) 
+x <- seq(-2*pi, 2*pi, length.out = 200) 
 datos.linea <- data.frame(x = x, y = sin(x))
 
 #Construimos Grafica de lineas con puntos
 ggplot(datos.linea) + 
-  geom_point(aes(x = x, y = y), color = "black", size = .5) + 
-  labs( title = "Función seno",
-        subtitle = "Aproximación por computadora",
+  geom_point(aes(x = x, y = y), color = "black",size=.1) + 
+  labs( title = "Funcion seno",
+        subtitle = "Aproximaci�n por computadora",
         x = "t",
         y = "sin(t)" 
         ) +
-  theme_bw()
+  theme_gray()
 
 ###############
 # EJERCICIO 3 #

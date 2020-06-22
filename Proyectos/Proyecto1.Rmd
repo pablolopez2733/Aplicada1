@@ -1,9 +1,16 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 <center> <h1>Proyecto 1</h1> </center>
 <br>
 <center> <h3>Fernando Stein Vallarta 165455</h3> </center>
 <center> <h3>Pablo López Landeros 178863</h3> </center>
 <center> <h3>Manuel García Garduño 162136</h3> </center>
 <br>
+
+
 
 ## Introducción:    
 Para el proyecto utilizamos la base de datos de Servicio Línea de Mujeres que se
@@ -31,13 +38,38 @@ La Línea mujeres brinda atención enfocada a las mujeres que sufren de violenci
 1. Información sobre programas y acciones del gobierno de la CDMX
 2. Asesoría psicológica
 3. Asesoría Jurídica
-4. Orientación médica   
+4. Orientación médica    
+
+```{r message=FALSE, warning=FALSE}
+#Paquetes requeridos
+library(tidyverse) 
+library(cowplot)
+library(kableExtra)
+library(knitr) 
+library(lubridate)
+library(dplyr) 
+library(moments) 
+library(readr)
+
+#Lectura de Datos y Diccionario
+linea.mujeres <- read_csv("https://raw.githubusercontent.com/pablolopez2733/Aplicada1/master/Bases%20de%20Datos/linea-mujeres.csv")
+diccionario.linea <- read_csv("https://github.com/pablolopez2733/Aplicada1/raw/master/Bases%20de%20Datos/DiccionarioLineaMujeres.csv")
+
+
+```
+
 
 ## Descripción de los datos
 
 Para realizar una breve descripción de los datos, empleamos el diccionario proporcionado por la página de datos abiertos de la CDMX. Observamos que la base de datos se compone de la siguiente forma:    
 
-”INSERTAR TABLA 1”
+```{r}
+#Descripción de la base de datos usando el Diccionario
+glimpse(linea.mujeres)
+variables <- diccionario.linea %>% select(`Nombre de la variable`, Definición)
+kable(variables, booktabs = T) %>% kable_styling(latex_options = "striped")
+
+```
 Ahora bien, en el presente proyecto buscamos estudiar múltiples situaciones
 que rodean a la realidad de discriminación por género en la CDMX.   
 
@@ -46,7 +78,23 @@ un incremento en las llamadas realizadas a la Línea Mujeres. La Jornada Naciona
 el número de llamadas por mes, contemplando que los meses de cuarentena son
 abril, mayo y algunos días de marzo y junio:   
 
-”INSERTAR GRAFICA 1”
+```{r}
+#ANALISIS ESTADISTICO-DESCRIPTIVO
+
+#En primer lugar, realizaremos un anÃ¡lisis de casos por mes
+llamadas.mes <- linea.mujeres %>% group_by(MES_ALTA) %>% count()
+llamadas.mes$mes<-c("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio")
+
+ggplot(llamadas.mes) + 
+  geom_col(aes(x = reorder(mes, MES_ALTA), y = n), color='skyblue',fill='steelblue') + 
+  theme_bw() + 
+  labs(
+    title = "Llamadas realizadas por mes a la Línea Mujeres",
+    x = "Mes",
+    y = "NÃºmero de llamadas"
+  ) +
+  theme(axis.text.x=element_text(angle=45, hjust=1))
+```
 
 En la anterior gráfica notamos que para los meses de abril, mayo y junio
 no se nota un aumento en el número de llamadas, de hecho, las llamadas han
@@ -58,13 +106,45 @@ en las llamadas a la línea mujeres a partir del cuarentena realizamos otra grá
 ahora de líneas. En esta gráfica es más clara la tendencia a la baja a raíz del
 comienzo de la cuarentena.   
 
-”INSERTAR GRAFICA 2” ´
+```{r}
+#PreCovid - PostCovid
+
+#Inicia 23 - Marzo - 2020
+linea.mujeres <- linea.mujeres %>% mutate(FECHA_HORA_ALTA = ymd_hms(FECHA_HORA_ALTA)) 
+linea.mujeres <- linea.mujeres %>% mutate(fecha = date(FECHA_HORA_ALTA))
+conteo_llamadas<-linea.mujeres %>% group_by(fecha) %>% tally() #llamadas por día
+
+#Gráfica de Líneas por fecha 
+ggplot(conteo_llamadas) + 
+  geom_line(aes(x = fecha, y = n), colour = "steelblue") +
+  theme_bw() + 
+  labs( 
+    x = "Fecha de llamada a la Línea Mujeres", 
+    y = "Cantidad de llamadas a la Línea Mujeres"
+    ) +
+    geom_point(aes(x = dmy("23/03/2020"), y = 384), color = "red", size = 2) + 
+    geom_text(aes(x = dmy("23/03/2020"), y = 384), label = "Inicio Cuarentena", size= 3.5, nudge_y= -10, colour = "black") 
+  
+#OJO : No se nota ninguna tendencia a partir del inicio de la cuarentena
+```
 
 De igual forma, nos gustar´ıa realizar un análisis por edad. En primera
 instancia, calculamos algunas estadísticas de resumen de la variable edad como
 su: desviación media absoluta, media, mediana, rango intercuartilico y varianza.   
 
-”INSERTAR TABLA 2”
+```{r}
+#AnÃ¡lisis por edades 
+
+#Tabla de resumen 
+llamadas.tabla.edad <- linea.mujeres %>%
+  summarise(MAD = mad(EDAD),
+            Promedio = mean(EDAD),
+            Mediana = median(EDAD),
+            IQR = IQR(EDAD), 
+            Varianza = var(EDAD))
+
+kable(llamadas.tabla.edad, booktabs = T) %>% kable_styling(latex_options = "striped")
+```
 
 Con los anteriores resultados observamos que el promedio de edad esta
 alrededor de los 43 años, que el 50% de la población es menor a los 42 años, que,
@@ -74,11 +154,25 @@ la variabilidad de las edades es mayor a 192.
 Si quisiéramos representar lo anterior en una gráfica, podemos usar una
 gráfica de barras.   
 
-”INSERTAR GRAFICA 3” 
+```{r}
+llamadas.edad <- linea.mujeres %>% group_by(EDAD) %>% count()
+ggplot(llamadas.edad)+
+  geom_col(aes(x = EDAD, y = n, fill = EDAD)) +
+  ggtitle("Edades de las usuarias de Línea mujeres") +
+  theme_minimal() +
+  labs(
+    x = "Edades",
+    y = "Total de llamadas"
+    
+  ) 
+```
 
 En la anterior gráfica, observamos que la distribución de las edades pareciera
 ser normal. De ahí que decidimos realizar un diagrama de densidad que valida
 nuestra hipótesis de normalidad, a pesar de tener algunos picos.   
 
-”INSERTAR GRAFICA 4” 
+```{r}
+ggplot(linea.mujeres) + 
+  geom_density(aes(x=EDAD), color="darkblue", fill="lightblue")
 
+```

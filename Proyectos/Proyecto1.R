@@ -13,14 +13,17 @@ library(knitr)
 library(lubridate)
 library(dplyr) 
 library(moments) 
+library(readr)
 
 #Lectura de Datos y Diccionario
-linea.mujeres <- read.csv("C:/Users/ferna/OneDrive/Escritorio/linea-mujeres.csv", encoding="UTF-8")
-diccionario.linea <- read.csv("C:/Users/ferna/OneDrive/Escritorio/Diccionario-Linea-Mujeres.csv", encoding="UTF-8", sep=";")
+linea.mujeres <- read_csv("https://raw.githubusercontent.com/pablolopez2733/Aplicada1/master/Bases%20de%20Datos/linea-mujeres.csv")
+diccionario.linea <- read_csv("https://github.com/pablolopez2733/Aplicada1/raw/master/Bases%20de%20Datos/DiccionarioLineaMujeres.csv")
 
-#DescripciÃ³n de la base de datos usando el Diccionario
+
+
+#Descripción de la base de datos usando el Diccionario
 glimpse(linea.mujeres)
-variables <- diccionario.linea %>% select(X.U.FEFF.Nombre.de.la.variable, Definición)
+variables <- diccionario.linea %>% select(`Nombre de la variable`, Definición)
 kable(variables, booktabs = T) %>% kable_styling(latex_options = "striped")
 
 #ANALISIS ESTADISTICO-DESCRIPTIVO
@@ -46,7 +49,7 @@ linea.mujeres <- linea.mujeres %>% mutate(FECHA_HORA_ALTA = ymd_hms(FECHA_HORA_A
 linea.mujeres <- linea.mujeres %>% mutate(fecha = date(FECHA_HORA_ALTA))
 conteo_llamadas<-linea.mujeres %>% group_by(fecha) %>% tally() #llamadas por día
 
-#GrÃ¡fica de Líneas por fecha 
+#Gráfica de Líneas por fecha 
 ggplot(conteo_llamadas) + 
   geom_line(aes(x = fecha, y = n), colour = "steelblue") +
   theme_bw() + 

@@ -1,5 +1,5 @@
 rm(list = ls())
-
+#Datos y librerias-------------------------------------------------------------------------------------------
 library(tidyverse)
 library(dplyr)
 library(moments)   #install.packages("moments")
@@ -19,7 +19,7 @@ datos <- datos %>% mutate(fecha = date(fecha_hechos))# tomate una nueva columna 
 
 #Generamos una base con conteo de delitos
 conteo_delitos <- datos %>% group_by(fecha) %>% tally()
-
+#---------------------------------------------------------------------------------------------------------------
 #Haremos tabla de contingencia:
 tabla_contingencia <- table(datos$alcaldia_hechos,datos$ao_inicio)
 tabla_contingencia_data <- as.data.frame(tabla_contingencia)
@@ -27,3 +27,6 @@ addmargins(tabla_contingencia)
 
 tabla_frecuencia <- prop.table(tabla_contingencia)
 addmargins(tabla_frecuencia)
+
+#Ejercicio de 
+

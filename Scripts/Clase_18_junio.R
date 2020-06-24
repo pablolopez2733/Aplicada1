@@ -10,7 +10,7 @@ library(ggplot2)
 datos <- read_csv("C:/Users/pablo/Desktop/GithubRepos/Aplicada1/Bases de Datos/carpetas-de-investigacion-pgj-cdmx.csv")
 View(datos)
 
-#El pipe %>% se interpreta como aplica la funciÃ³n de la derecha a lo de la izquierda
+#El pipe %>% se interpreta como aplica la funci�³n de la derecha a lo de la izquierda
 datos %>% glimpse()
 
 #Lectura del formato de fecha y cambio de fecha

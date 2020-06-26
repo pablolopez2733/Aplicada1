@@ -28,7 +28,7 @@ violin <- ggplot(denuncias.cdmx, aes(x=MUNICIPIO_USUARIA, y=EDAD , fill=MUNICIPI
           theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+ 
             geom_violin()
           
-violin
+violin + geom_boxplot(width=0.1)
 
 #------------------------------------------------------------------------------
 #Denuncias por delegación en CDMX
@@ -56,5 +56,21 @@ map <- ggplot() + geom_polygon(data = shp_df, aes(x = long, y = lat, group = gro
   labs(title="Llamadas a línea mujeres por alcaldía en la CDMX",subtitle = "Año:2020",caption = "Fuente: Gobierno de la CDMX")+
   theme(legend.title = "Llamadas recibidas")
 map + theme_void()
+
+#Prueba tabla:
+num_cdmx <- nrow(denuncias.cdmx)
+num_tot <- nrow(linea.mujeres)
+llam_int <- num_tot-num_cdmx
+
+origen <- c('Llamadas totales','Llamadas CDMX','Llamadas Interior de la República')
+denuncias <- c(num_tot, num_cdmx, llam_int)
+porc_total=100
+porc_cdmx <- (num_cdmx/num_tot)*100
+porc_int <- 100-porc_cdmx
+
+porcentaje <- c(porc_total,porc_cdmx,porc_int)
+calls_df <- data.frame(origen, denuncias,porcentaje)
+
+kable(calls_df, booktabs = T) %>% kable_styling(latex_options = "striped")
 
 

@@ -139,8 +139,8 @@ data2 <- as.data.frame(data2)
 
 
 #Nos quedamos con variables de relevancia                   
-data1<- data1 %>% select(user_id, status_id, screen_name, text)
-data2<-data2 %>% select(user_id, status_id, screen_name, text)
+data1<- data1 %>% select(user_id, status_id, screen_name, text, verified)
+data2<-data2 %>% select(user_id, status_id, screen_name, text, verified)
 r<- rbind(data1,data2)
 r.len <- r%>%count()
 unicos <- r %>% distinct(text)%>%tally()%>%as.numeric() 
@@ -148,7 +148,7 @@ repetidos<- r.len - unicos
 
 
 # Estimamos total de cuentas verificadas que se involucran en trump-------------
-followers <- data1 %>% select(user_id,followers_count)
+
 verified <- data1 %>% select(user_id,verified)
 trus <- length (verified$verified[verified$verified==TRUE])
 
@@ -160,9 +160,9 @@ n1 <- nrow(data1)
 n2 <- nrow(data2)
 m <- as.numeric(repetidos)
 N <- (n1 * n2)/m
-N <- as.numeric(N)
+N <- as.numeric(N) *100
 x_s <- mean(verified$verified)
-t_hat <- N*(1/n1)*(sum(verified$verified))
+t_hat <- N*(1/n1)*(sum(verified$verified))*100
 alpha <- .01
 z <- qnorm(1-alpha/2)
 term <- rep(0,n1)
@@ -172,14 +172,14 @@ for (i in 1:n1) {
   term[i]=(verified$verified[i]-x_s)^2
 }
 
-s_x <- 1/(n1-1)*(sum(term))
+s_x <- ((1/(n1-1))*(sum(term))*100)
 
 V_hat <- N^2 * ((1-n1/N)/n1 )* s_x
 #Intervalo de confianza al 99% del total de cuentas verificadas que hablan de Trump
 
 IC_ver <- c(t_hat-z*sqrt(V_hat),t_hat + z*sqrt(V_hat))
 ciLow <- round(IC_ver[1])
-ciHigh <- round(IC_ver[2])
+ciHigh <- round(IC_ver[2]) 
 paste0("Se estiman ", round(t_hat) ," cuentas verificadas tweeteando sobre Trump con intervalo de confianza [",
        ciLow, ",", ciHigh,"] del 99%")
 #Graficas:

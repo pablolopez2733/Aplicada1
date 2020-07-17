@@ -25,3 +25,5 @@ epsilon <- 1
 n <- ceiling((z*s2)/(epsilon^2+(z*s2/N)))
 
 print(paste0("Para un intervalo de confianza de 80%, el tamaño de muestra necesario es: ", n))
+
+#IC:

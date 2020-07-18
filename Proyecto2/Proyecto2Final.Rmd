@@ -51,6 +51,8 @@ library(tmaptools)
 ```
 ### Extracción de los Tweets muestra
 
+A continuación presentamos la función que originalmente utilizamos para extraer los tweets. Tuvimos problemas con la función render en R markdown por lo que hubo que ejecutar el código en un script separado para generar un archivo rds y después leer este archivo. 
+
 ```{r ,tidy=TRUE, eval=FALSE}
 #Parte 1: Importamos los tweets y los convertimos en una base de datos. 
 #SegÃºn el link https://github.com/ropensci/rtweet/issues/356 existe un error en la configuraciÃ³n 
@@ -177,6 +179,7 @@ unicos <- r %>% distinct(text)%>%tally()%>%as.numeric()
 repetidos<- r.len - unicos
 ```
 #### Lectura de los RDS
+Leemos los archivos rds:
 
 ```{r , tidy=TRUE}
 
@@ -204,9 +207,9 @@ En Twitter, una cuenta verificada aparece con una palomita azul a un lado del no
 
 Para estimar el total y sus intervalos de confianza, necesitamos primero la $N$. La estimaremos adaptando el método de captura recaptura propuesto por Lohr en el capítulo 13 del libro *Sampling: Design and Analysis*. Utilizaremos la fórmula:
 $$ \hat{N} = \frac{n_1 n_2}{m}$$
-Para adaptar el método, capturamos tweets durante 5 mins dos veces. Obteniendo así $n_1$ com el tamaño de la primer captura. $n_2$ el tamaño de la segunda captura y $m$ como la cantidad de usuarios que aparecían en ambas capturas.
+Para adaptar el método captura-recaptura, capturamos tweets durante 10 minutos dos veces. Obteniendo así $n_1$ como el tamaño de la primer captura. $n_2$ el tamaño de la segunda captura y $m$ como la cantidad de usuarios que aparecían en ambas capturas.
 
-Una vez teniendo un estimador de $N$. utilizaremos el estimador para el total visto en clase:
+Una vez teniendo un estimador de $N$, utilizamos dicho estimador para estimar el total poblacional de la siguiente manera:
 $$\hat{t} = N \bar{x_s} = N \frac{1}{n_1} \sum_{i=1}^{n_1} x_i$$
 
 Con intervalos de confianza: 
@@ -216,7 +219,7 @@ $$ \hat{V(\hat{t})} = N^2 \frac{1-\frac{n_1}{N}}{n_1} S^2_{x,s}$$
 y a su vez: 
 
 $$ S^2_{x,s} = \frac{1}{n_1-1} \sum_{k=1}^{n_1} (x_k - \bar{x_s} )^2$$
-###### Valor esperado y Varianza del estimador:
+### Valor esperado del estimador:
 
 $$E[\hat{t}] = E [  \sum_{k=1}^{N} \frac{x_k}{\pi_k} \mathbb{I}_S  ] =  \sum_{k=1}^{N} \frac{x_k}{\pi_k} E [\mathbb{I}_S (x_k)] =  \sum_{k=1}^{N} \frac{x_k}{\pi_k} \pi_k = t$$
 
@@ -262,8 +265,8 @@ V_hat <- N^2 * ((1-n1/N)/n1 )* s_x
 IC_ver <- c(t_hat-z*sqrt(V_hat),t_hat + z*sqrt(V_hat))
 ciLow <- round(IC_ver[1])
 ciHigh <- round(IC_ver[2]) 
-paste0("Se estiman ", round(t_hat) ," cuentas verificadas tweeteando sobre Trump con intervalo de confianza [",
-       ciLow, ",", ciHigh,"] del 99%")
+paste0("Se estiman ",round(t_hat)," cuentas verificadas tweeteando sobre Trump")
+paste0("Con intervalo de confianza [",ciLow, ",", ciHigh,"] del 99%")
 
 ```
 Para darnos una idea de la proporción de cuentas verificadas, hagamos una gráfica de barras que muestre el total de 
@@ -274,7 +277,12 @@ cuentas verificadas y no verificadas en la muestra.
 df <- data.frame(cuentas=c("Verificadas", "No Verificadas"),
                  cantidad_tweets=c(trus,n1-trus))
 p<-ggplot(data=df, aes(x=cuentas, y=cantidad_tweets)) +
-  geom_bar(stat="identity",fill="lightblue")
+  geom_bar(stat="identity",fill="lightblue")+
+  labs(
+    title = "Conteo de tweets sobre Trump por cuentas verificadas y no verificadas",
+    x = "Tipo de cuenta",
+    y = "Conteo"
+  )
 p
 
 ```
@@ -336,8 +344,10 @@ Partimos del estimador puntual que previamente hemos definido para crear un
 ```{r,tidy=TRUE}
 
 n            <- length(user_data$Diferencia) #Tamaño de la muestra
-N            <- 330000000             #Cantidad de usuarios activos en twitter en el último mes
-                                      #Fuente https://www.statista.com/statistics/282087/number-of-monthly-active-twitter-users/
+#Cantidad de usuarios activos en twitter en el último mes:
+N            <- 330000000 
+#Fuente:
+#https://www.statista.com/statistics/282087/number-of-monthly-active-twitter-users/
 a            <- qnorm(1-alpha/2)
 desv.xbarra  <- sqrt((1-n/N)*var(user_data$Diferencia)/n)
 ```
@@ -406,13 +416,17 @@ paste0("IC: [",
 Para el siguiente punto, buscamos explicar las características relacionadas con los tweets que se escriben acerca de Donald Trump. En concreto, queremos saber si los posts que se escriben hablan de forma positiva, neutral o negativa acerca de Donald Trump. Para esto necesitamos realizar algo llamado "Sentiment Analysis" o Análisis de Sentimientos en español. El análisis de sentimientos es una técnica de aprendizaje de maquina que detecta la polaridad dentro de un texto, es decir, trata de describir las emociones que el texto presenta. Para esto, utilizaremos los paquetes tidyverse y tidytext junto con el diccionario "bing" realizado por Bing Liu que clasifica las palabras en positivas y negativas. 
 
 ```{r,tidy=TRUE}
-dropwords <- c("trump") # La palabra "Trump" tiene una conotación en el lexicon
+dropwords <- c("trump") 
+# La palabra "Trump" tiene una conotación en el lexicon
 
 sentiment<-data1 %>% 
   unnest_tokens(word, text, token = 'words') %>% 
-  left_join(get_sentiments("bing") %>% filter(!word %in% dropwords)) %>% # Obtiene las palabras de sentimiento
-  mutate(sentiment = if_else(sentiment == 'positive', 1, -1, missing = 0)) %>% # Asigna valores a las palabras de sentimiento 
-  group_by(user_id) %>% #Agrupamos las palabras por clave
+  # Obtiene las palabras de sentimiento
+  left_join(get_sentiments("bing") %>% filter(!word %in% dropwords)) %>% 
+  # Asigna valores a las palabras de sentimiento 
+  mutate(sentiment = if_else(sentiment == 'positive', 1, -1, missing = 0)) %>%
+  #Agrupamos las palabras por clave
+  group_by(user_id) %>% 
   summarise(sentiment = sum(sentiment))
 
 #Agrupamos por tipo de sentimiento del tweet
@@ -453,6 +467,11 @@ Ahora bien, notemos que únicamente tenemos una muestra. Pero notemos que se tra
 N.positivo <- as.numeric(n.positivo$n)/n * N
 N.negativo <- as.numeric(n.negativo$n)/n * N
 N.neutral  <- as.numeric(n.neutral$n)/n * N
+
+paste0("Total estimado de comentarios positivos: ", N.positivo)
+paste0("Total estimado de comentarios negativos: ", N.negativo)
+paste0("Total estimado de comentarios neutrales: ", N.neutral)
+
 
 ```
 
@@ -501,7 +520,9 @@ Este intervalo aleatorio captura el verdadero valor del parámetro $p$ con proba
 Siguiendo este esquema teórico, ahora podemos aplicarlo para responder a la pregunta que nos
 atañe en esta sección, a saber, ¿qué proporción de seguidores de Donald Trump reside
 fuera de los Estados Unidos? A continucación se presenta el código utilizado.
-Obtenemos una muestra aleatoria de 5,000 followers de Trump:
+Obtenemos una muestra aleatoria de 5,000 followers de Trump:   
+
+De nuevo tuvimos problemas para utilizar el paquete rtweet en R markdown. Por lo que utilizamos el siguiente código para extraer los tweets necesarios y generar un archivo rds:
 ```{r,tidy=TRUE,eval=FALSE}
 
 #
@@ -511,7 +532,7 @@ muestra_followers <- users_data(muestra_aux1)
 saveRDS(muestra_followers,file = "muestraTrump.rds")
 
 ```
-
+Leemos el rds:
 
 ```{r,tidy=TRUE}
 
@@ -637,7 +658,9 @@ n_extranjeros <- n_muestra-length(muestra_followers$user_id)
 #Estimamos la proporción de de tweets extranjeros
 estim         <- n_extranjeros/n_muestra
 
-#A partir de esta estimación puntual de la proporción de followers extranjeros de Trump
+#A partir de esta estimación puntual de la proporción de followers extranjeros 
+#de Trump. 
+
 #crearemos un intervalo de confianza a nivel 99%
 N                 <- 83650000 #Numero total de followers de Trump 
 alpha             <- 0.01
@@ -659,5 +682,5 @@ La opinión de la gente es algo sumamente relevante en algunos temas y simplemen
 
 ## Referencias   
 
-1. Repositorio de JBGruber ** recover_stream.R**. Link: https://gist.github.com/JBGruber/dee4c44e7d38d537426f57ba1e4f84ab
+1. Repositorio de JBGruber **recover_stream.R**. Link: https://gist.github.com/JBGruber/dee4c44e7d38d537426f57ba1e4f84ab
 2. Lohr, S. L. (2019). Sampling design and analysis. Boca Raton, FL: CRC Press.

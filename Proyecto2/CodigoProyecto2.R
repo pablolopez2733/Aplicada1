@@ -292,7 +292,7 @@ ggplot(count.sentiment)+
 N.positivo <- as.numeric(n.positivo$n)/n * N
 N.negativo <- as.numeric(n.negativo$n)/n * N
 N.neutral  <- as.numeric(n.neutral$n)/n * N
-
+#--------------------------------------------------------------------------------------------------------------------
 #Con lo que obtenemos el número de tweets con una característica: hablar bien, ser neutrales o hablar mal de Trump
 
 #Obtenemos una muestra aleatoria de 5,000 followers de Trump

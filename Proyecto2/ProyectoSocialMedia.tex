@@ -1,0 +1,887 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Proyecto 2},
+  pdfauthor={Fernando Stein Vallarta 165455; Pablo López Landeros 178863; Manuel García Garduño 162136},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+
+\title{Proyecto 2}
+\author{Fernando Stein Vallarta 165455 \and Pablo López Landeros 178863 \and Manuel García Garduño 162136}
+\date{}
+
+\begin{document}
+\maketitle
+
+\hypertarget{introducciuxf3n}{%
+\subsection{Introducción}\label{introducciuxf3n}}
+
+Durante los últimos 10 años, las redes sociales han crecido a un ritmo
+descomunal y parece que cada vez toman mayor relevancia en varios
+aspectos de nuestras vidas. Esta tendencia ha dado pie a estudiar a
+través de la estadística, todo lo que fluye a través de estas redes,
+esto con el objetivo de poder transformar los datos en información, la
+información en conocimiento y el conocimiento en \emph{insights}. Es por
+esto que ya hoy en día existen gran cantidad de APIs y código
+``prefabricado'' que nos permite facilmente minar los datos que se
+encuentran en los servidores de Twitter, Facebook y/o Instagram.
+
+Para un primer acercamiento a estas herramientas se plantea este
+proyecto. Consiste en utilizar los conceptos de muestreo visto en clase
+y el paquete de R \emph{rtweet} para estudiar la estructura de Twitter.
+Concretamente, enfocamos el estudio en extraer y analizar el contenido
+de tweets que involucren o discutan al presidente de los Estados Unidos:
+\textbf{Donald Trump}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Importamos librerías:}
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list=} \KeywordTok{ls}\NormalTok{())}
+
+\CommentTok{#Importamos librerias}
+
+\CommentTok{# 0. Importamos Librerias}
+\KeywordTok{library}\NormalTok{(cowplot)}
+\KeywordTok{library}\NormalTok{(dplyr) }
+\KeywordTok{library}\NormalTok{(glue)}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(ggmap)}
+\KeywordTok{library}\NormalTok{(ggcorrplot)}
+\KeywordTok{library}\NormalTok{(jsonlite)}
+\KeywordTok{library}\NormalTok{(kableExtra)}
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{library}\NormalTok{(ks)}
+\KeywordTok{library}\NormalTok{(leaflet)}
+\KeywordTok{library}\NormalTok{(lubridate)}
+\KeywordTok{library}\NormalTok{(mapsapi)}
+\KeywordTok{library}\NormalTok{(moments) }
+\KeywordTok{library}\NormalTok{(rtweet)}
+\KeywordTok{library}\NormalTok{(rjson)}
+\KeywordTok{library}\NormalTok{(RCurl)}
+\KeywordTok{library}\NormalTok{(stringr)}
+\KeywordTok{library}\NormalTok{(tidytext)}
+\KeywordTok{library}\NormalTok{(tidyverse) }
+\KeywordTok{library}\NormalTok{(tmaptools)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{extracciuxf3n-de-los-tweets-muestra}{%
+\subsubsection{Extracción de los Tweets
+muestra}\label{extracciuxf3n-de-los-tweets-muestra}}
+
+Este es el código que originalmente utilizamos para extraer las muestras
+pero R markdown no puede hacer el render. Por lo que hubo que correr
+estas líneas por separado en un script y posteriormente leer los
+archivos RDS generados.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Parte 1: Importamos los tweets y los convertimos en una base de datos. }
+\CommentTok{#SegÃºn el link https://github.com/ropensci/rtweet/issues/356 existe un error en la configuraciÃ³n }
+\CommentTok{#de rTweet cuando usamos files de tipo json, luego entonces utilizamos el fix proporcionado en el }
+\CommentTok{#siguiente link: https://gist.github.com/JBGruber/dee4c44e7d38d537426f57ba1e4f84ab}
+
+\CommentTok{#El fix consiste en la función recover_stream, la cual se construye en las siguientes líneas:}
+
+\CommentTok{#' Recovers Twitter damaged stream data (JSON file) into parsed data frame.}
+\CommentTok{#'}
+\CommentTok{#' @param path Character, name of JSON file with data collected by}
+\CommentTok{#'   \textbackslash{}code\{\textbackslash{}link\{stream_tweets\}\}.}
+\CommentTok{#' @param dir Character, name of a directory where intermediate files are}
+\CommentTok{#'   stored.}
+\CommentTok{#' @param verbose Logical, should progress be displayed?}
+\CommentTok{#'}
+\CommentTok{#' @family stream tweets}
+\NormalTok{recover_stream <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(path, }\DataTypeTok{dir =} \OtherTok{NULL}\NormalTok{, }\DataTypeTok{verbose =} \OtherTok{TRUE}\NormalTok{) \{}
+  
+  \CommentTok{# read file and split to tweets}
+\NormalTok{  lines <-}\StringTok{ }\KeywordTok{readChar}\NormalTok{(path, }\KeywordTok{file.info}\NormalTok{(path)}\OperatorTok{$}\NormalTok{size, }\DataTypeTok{useBytes =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{  tweets <-}\StringTok{ }\NormalTok{stringi}\OperatorTok{::}\KeywordTok{stri_split_fixed}\NormalTok{(lines, }\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{\{"}\NormalTok{)[[}\DecValTok{1}\NormalTok{]]}
+\NormalTok{  tweets[}\OperatorTok{-}\DecValTok{1}\NormalTok{] <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\StringTok{"\{"}\NormalTok{, tweets[}\OperatorTok{-}\DecValTok{1}\NormalTok{])}
+\NormalTok{  tweets <-}\StringTok{ }\NormalTok{tweets[}\OperatorTok{!}\NormalTok{(tweets }\OperatorTok{==}\StringTok{ ""} \OperatorTok{|}\StringTok{ }\NormalTok{tweets }\OperatorTok{==}\StringTok{ "\{"}\NormalTok{)]}
+  
+  \CommentTok{# remove misbehaving characters}
+\NormalTok{  tweets <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}r}\StringTok{"}\NormalTok{, }\StringTok{""}\NormalTok{, tweets, }\DataTypeTok{fixed =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{  tweets <-}\StringTok{ }\KeywordTok{gsub}\NormalTok{(}\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, }\StringTok{""}\NormalTok{, tweets, }\DataTypeTok{fixed =} \OtherTok{TRUE}\NormalTok{)}
+  
+  \CommentTok{# write tweets to disk and try to read them in individually}
+  \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{is.null}\NormalTok{(dir)) \{}
+\NormalTok{    dir <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(}\KeywordTok{tempdir}\NormalTok{(), }\StringTok{"/tweets/"}\NormalTok{)}
+    \KeywordTok{dir.create}\NormalTok{(dir, }\DataTypeTok{showWarnings =} \OtherTok{FALSE}\NormalTok{)}
+\NormalTok{  \}}
+  
+  \ControlFlowTok{if}\NormalTok{ (verbose) \{}
+\NormalTok{    pb <-}\StringTok{ }\NormalTok{progress}\OperatorTok{::}\NormalTok{progress_bar}\OperatorTok{$}\KeywordTok{new}\NormalTok{(}
+      \DataTypeTok{format =} \StringTok{"Processing tweets [:bar] :percent, :eta remaining"}\NormalTok{,}
+      \DataTypeTok{total =} \KeywordTok{length}\NormalTok{(tweets), }\DataTypeTok{clear =} \OtherTok{FALSE}
+\NormalTok{    )}
+\NormalTok{    pb}\OperatorTok{$}\KeywordTok{tick}\NormalTok{(}\DecValTok{0}\NormalTok{)}
+\NormalTok{  \}}
+  
+\NormalTok{  tweets_l <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(tweets, }\ControlFlowTok{function}\NormalTok{(t) \{}
+\NormalTok{    pb}\OperatorTok{$}\KeywordTok{tick}\NormalTok{()}
+\NormalTok{    id <-}\StringTok{ }\KeywordTok{unlist}\NormalTok{(stringi}\OperatorTok{::}\KeywordTok{stri_extract_first_regex}\NormalTok{(t, }\StringTok{"(?<=id}\CharTok{\textbackslash{}"}\StringTok{:)}\CharTok{\textbackslash{}\textbackslash{}}\StringTok{d+(?=,)"}\NormalTok{))[}\DecValTok{1}\NormalTok{]}
+\NormalTok{    f <-}\StringTok{ }\KeywordTok{paste0}\NormalTok{(dir, id, }\StringTok{".json"}\NormalTok{)}
+    \KeywordTok{writeLines}\NormalTok{(t, f, }\DataTypeTok{useBytes =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{    out <-}\StringTok{ }\KeywordTok{tryCatch}\NormalTok{(rtweet}\OperatorTok{::}\KeywordTok{parse_stream}\NormalTok{(f),}
+                    \DataTypeTok{error =} \ControlFlowTok{function}\NormalTok{(e) \{\})}
+    \ControlFlowTok{if}\NormalTok{ (}\StringTok{"tbl_df"} \OperatorTok{%in%}\StringTok{ }\KeywordTok{class}\NormalTok{(out)) \{}
+      \KeywordTok{return}\NormalTok{(out)}
+\NormalTok{    \} }\ControlFlowTok{else}\NormalTok{ \{}
+      \KeywordTok{return}\NormalTok{(id)}
+\NormalTok{    \}}
+\NormalTok{  \})}
+  
+  \CommentTok{# test which ones failed}
+\NormalTok{  test <-}\StringTok{ }\KeywordTok{vapply}\NormalTok{(tweets_l, is.character, }\DataTypeTok{FUN.VALUE =} \KeywordTok{logical}\NormalTok{(1L))}
+\NormalTok{  bad_files <-}\StringTok{ }\KeywordTok{unlist}\NormalTok{(tweets_l[test])}
+  
+  \CommentTok{# Let user decide what to do}
+  \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{length}\NormalTok{(bad_files) }\OperatorTok{>}\StringTok{ }\DecValTok{0}\NormalTok{) \{}
+    \KeywordTok{message}\NormalTok{(}\StringTok{"There were "}\NormalTok{, }\KeywordTok{length}\NormalTok{(bad_files),}
+            \StringTok{" tweets with problems. Should they be copied to your working directory?"}\NormalTok{)}
+\NormalTok{    sel <-}\StringTok{ }\KeywordTok{menu}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\StringTok{"no"}\NormalTok{, }\StringTok{"yes"}\NormalTok{, }\StringTok{"copy a list with status_ids"}\NormalTok{))}
+    \ControlFlowTok{if}\NormalTok{ (sel }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{) \{}
+      \KeywordTok{dir.create}\NormalTok{(}\KeywordTok{paste0}\NormalTok{(}\KeywordTok{getwd}\NormalTok{(), }\StringTok{"/broken_tweets/"}\NormalTok{), }\DataTypeTok{showWarnings =} \OtherTok{FALSE}\NormalTok{)}
+      \KeywordTok{file.copy}\NormalTok{(}
+        \DataTypeTok{from =} \KeywordTok{paste0}\NormalTok{(dir, bad_files, }\StringTok{".json"}\NormalTok{),}
+        \DataTypeTok{to =} \KeywordTok{paste0}\NormalTok{(}\KeywordTok{getwd}\NormalTok{(), }\StringTok{"/broken_tweets/"}\NormalTok{, bad_files, }\StringTok{".json"}\NormalTok{)}
+\NormalTok{      )}
+\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (sel }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{) \{}
+      \KeywordTok{writeLines}\NormalTok{(bad_files, }\StringTok{"broken_tweets.txt"}\NormalTok{)}
+\NormalTok{    \}}
+\NormalTok{  \}}
+  
+  \CommentTok{# clean up}
+  \KeywordTok{unlink}\NormalTok{(dir, }\DataTypeTok{recursive =} \OtherTok{TRUE}\NormalTok{)}
+  
+  \CommentTok{# return good tweets}
+  \KeywordTok{return}\NormalTok{(dplyr}\OperatorTok{::}\KeywordTok{bind_rows}\NormalTok{(tweets_l[}\OperatorTok{!}\NormalTok{test]))}
+\NormalTok{\}}
+
+\CommentTok{# 1. Minería de Datos}
+\CommentTok{# Después de emplear el fix, comenzamos con la minería de datos/tweets}
+\CommentTok{# Notemos que tomaremos 2 muestras, pues esto nos servirá para realizar captura y recaptura}
+\CommentTok{#Mineria de Datos}
+\NormalTok{file.name1 <-}\StringTok{ "data_tw.json"}
+\NormalTok{file.name2 <-}\StringTok{ "data_tw2.json"}
+\NormalTok{time.ellapsed<-}\StringTok{ }\DecValTok{600}
+
+\CommentTok{#MUESTRA 1}
+\KeywordTok{stream_tweets}\NormalTok{(      }\StringTok{"Trump"}\NormalTok{,}
+                    \DataTypeTok{parse=}\OtherTok{FALSE}\NormalTok{,}
+                    \DataTypeTok{file_name=}\NormalTok{file.name1,}
+                    \DataTypeTok{language =} \StringTok{"en"}\NormalTok{, }
+                    \DataTypeTok{timeout =}\NormalTok{ time.ellapsed}
+\NormalTok{)}
+
+\NormalTok{data_}\DecValTok{1}\NormalTok{<-}\KeywordTok{recover_stream}\NormalTok{(file.name1)}
+\NormalTok{data_}\DecValTok{1}\NormalTok{<-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(data_}\DecValTok{1}\NormalTok{)}
+
+\CommentTok{#MUESTRA 2}
+\KeywordTok{stream_tweets}\NormalTok{(      }\StringTok{"Trump"}\NormalTok{,}
+                    \DataTypeTok{parse=}\OtherTok{FALSE}\NormalTok{,}
+                    \DataTypeTok{file_name=}\NormalTok{file.name2,}
+                    \DataTypeTok{language =} \StringTok{"en"}\NormalTok{, }
+                    \DataTypeTok{timeout =}\NormalTok{ time.ellapsed}
+\NormalTok{)}
+
+\NormalTok{data_}\DecValTok{2}\NormalTok{<-}\KeywordTok{recover_stream}\NormalTok{(file.name2)}
+\NormalTok{data_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(data_}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{lectura-de-los-rds}{%
+\paragraph{Lectura de los RDS}\label{lectura-de-los-rds}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{data_}\DecValTok{1}\NormalTok{ <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{readRDS}\NormalTok{(}\DataTypeTok{file =} \StringTok{'data_1.rds'}\NormalTok{))}
+\NormalTok{data_}\DecValTok{2}\NormalTok{ <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{readRDS}\NormalTok{(}\DataTypeTok{file =} \StringTok{'data_2.rds'}\NormalTok{))}
+
+\CommentTok{#Para ambos data.frames nos quedamos con las variables de relevancia}
+\NormalTok{data1<-}\StringTok{ }\NormalTok{data_}\DecValTok{1} \OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(user_id, status_id, screen_name, text,verified)}
+\NormalTok{data2<-data_}\DecValTok{2} \OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(user_id, status_id, screen_name, text, verified)}
+
+\CommentTok{#Para realizar captura y recaptura juntaremos las dos bases de datos y buscaremos los textos}
+\CommentTok{# únicos para obtener nuestra "k"}
+\NormalTok{r<-}\KeywordTok{rbind}\NormalTok{(data1,data2) }
+\NormalTok{r.len <-}\StringTok{ }\NormalTok{r}\OperatorTok{%>%}\KeywordTok{count}\NormalTok{()}
+\NormalTok{unicos <-}\StringTok{ }\NormalTok{r }\OperatorTok{%>%}\StringTok{ }\KeywordTok{distinct}\NormalTok{(text)}\OperatorTok{%>%}\KeywordTok{tally}\NormalTok{()}\OperatorTok{%>%}\KeywordTok{as.numeric}\NormalTok{() }
+\NormalTok{repetidos<-}\StringTok{ }\NormalTok{r.len }\OperatorTok{-}\StringTok{ }\NormalTok{unicos}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{estimaciuxf3n-del-total-de-cuentas-verificadas}{%
+\subsubsection{Estimación del total de cuentas
+verificadas}\label{estimaciuxf3n-del-total-de-cuentas-verificadas}}
+
+En Twitter, una cuenta verificada aparece con una palomita azul a un
+lado del nombre de usuario. Esto permite a la gente saber que esa cuenta
+de interés público es auténtica. Por lo tanto, esto no solo es una
+mejora estética sino una manera de darle un poco más respaldo a lo que
+se escriba en la red social. Es por eso que nos interesamos en estimar
+un total de cuentas verificadas que se involucran en hablar sobre Donald
+Trump.
+
+Para estimar el total y sus intervalos de confianza, necesitamos primero
+la \(N\). La estimaremos adaptando el método de captura recaptura
+propuesto por Lohr en el capítulo 13 del libro \emph{Sampling: Design
+and Analysis}. Utilizaremos la fórmula: \[ \hat{N} = \frac{n_1 n_2}{m}\]
+Para adaptar el método, capturamos tweets durante 5 mins dos veces.
+Obteniendo así \(n_1\) com el tamaño de la primer captura. \(n_2\) el
+tamaño de la segunda captura y \(m\) como la cantidad de usuarios que
+aparecían en ambas capturas.
+
+Una vez teniendo un estimador de \(N\). utilizaremos el estimador para
+el total visto en clase:
+\[\hat{t} = N \bar{x_s} = N \frac{1}{n_1} \sum_{i=1}^{n_1} x_i\]
+
+Con intervalos de confianza:
+\[\hat{t} \pm Z_{1-\frac{\alpha}{2}} \sqrt{\hat{V(\hat{t}) }}\] donde:
+\[ \hat{V(\hat{t})} = N^2 \frac{1-\frac{n_1}{N}}{n_1} S^2_{x,s}\] y a su
+vez:
+
+\[ S^2_{x,s} = \frac{1}{n_1-1} \sum_{k=1}^{n_1} (x_k - \bar{x_s} )^2\]
+\#\#\#\#\#\# Valor esperado y Varianza del estimador:
+
+\[E[\hat{t}] = E [  \sum_{k=1}^{N} \frac{x_k}{\pi_k} \mathbb{I}_S  ] =  \sum_{k=1}^{N} \frac{x_k}{\pi_k} E [\mathbb{I}_S (x_k)] =  \sum_{k=1}^{N} \frac{x_k}{\pi_k} \pi_k = t\]
+
+Es decir, nuestro estimador \(\hat{t}\) es insesgado. Obtengamos
+entonces un estimador del total con su respectivo intervalo de confianza
+al 99\%:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Obtenemos nuestra N}
+\NormalTok{n1 <-}\StringTok{ }\KeywordTok{nrow}\NormalTok{(data1)}
+\NormalTok{n2 <-}\StringTok{ }\KeywordTok{nrow}\NormalTok{(data2)}
+\NormalTok{m <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(repetidos)}
+\NormalTok{N <-}\StringTok{ }\NormalTok{(n1 }\OperatorTok{*}\StringTok{ }\NormalTok{n2)}\OperatorTok{/}\NormalTok{m }\CommentTok{#Utilizando la formula de captura y recaptura}
+\NormalTok{N <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(N) }\OperatorTok{*}\DecValTok{100} \CommentTok{#Notamos que es el 1% de la muestra}
+
+\CommentTok{# 2. Buscamos encontrar el número de cuentas verificadas que hablan acerca de Trump}
+
+\NormalTok{verified <-}\StringTok{ }\NormalTok{data_}\DecValTok{1} \OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(user_id,verified)}
+\NormalTok{trus <-}\StringTok{ }\KeywordTok{length}\NormalTok{ (verified}\OperatorTok{$}\NormalTok{verified[verified}\OperatorTok{$}\NormalTok{verified}\OperatorTok{==}\OtherTok{TRUE}\NormalTok{])}
+
+\NormalTok{cols <-}\StringTok{ }\KeywordTok{sapply}\NormalTok{(verified, is.logical)}
+\NormalTok{verified[,cols] <-}\StringTok{ }\KeywordTok{lapply}\NormalTok{(verified[,cols], as.numeric)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in `[<-.data.frame`(`*tmp*`, , cols, value = list(0, 0, 0, 0, 0, :
+## provided 282 variables to replace 1 variables
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x_s <-}\StringTok{ }\KeywordTok{mean}\NormalTok{(verified}\OperatorTok{$}\NormalTok{verified)}
+\NormalTok{t_hat <-}\StringTok{ }\NormalTok{N}\OperatorTok{*}\NormalTok{(}\DecValTok{1}\OperatorTok{/}\NormalTok{n1)}\OperatorTok{*}\NormalTok{(}\KeywordTok{sum}\NormalTok{(verified}\OperatorTok{$}\NormalTok{verified))}\OperatorTok{*}\DecValTok{100}
+\NormalTok{alpha <-}\StringTok{ }\FloatTok{.01}
+\NormalTok{z <-}\StringTok{ }\KeywordTok{qnorm}\NormalTok{(}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha}\OperatorTok{/}\DecValTok{2}\NormalTok{)}
+\NormalTok{term <-}\StringTok{ }\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{,n1)}
+\CommentTok{#estimar sx}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\NormalTok{n1) \{}
+  
+\NormalTok{  term[i]=(verified}\OperatorTok{$}\NormalTok{verified[i]}\OperatorTok{-}\NormalTok{x_s)}\OperatorTok{^}\DecValTok{2}
+\NormalTok{\}}
+
+\NormalTok{s_x <-}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{/}\NormalTok{(n1}\DecValTok{-1}\NormalTok{))}\OperatorTok{*}\NormalTok{(}\KeywordTok{sum}\NormalTok{(term))}\OperatorTok{*}\DecValTok{100}\NormalTok{)}
+
+\NormalTok{V_hat <-}\StringTok{ }\NormalTok{N}\OperatorTok{^}\DecValTok{2} \OperatorTok{*}\StringTok{ }\NormalTok{((}\DecValTok{1}\OperatorTok{-}\NormalTok{n1}\OperatorTok{/}\NormalTok{N)}\OperatorTok{/}\NormalTok{n1 )}\OperatorTok{*}\StringTok{ }\NormalTok{s_x}
+
+\CommentTok{#Intervalo de confianza al 99% del total de cuentas verificadas que hablan de Trump}
+
+\NormalTok{IC_ver <-}\StringTok{ }\KeywordTok{c}\NormalTok{(t_hat}\OperatorTok{-}\NormalTok{z}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{(V_hat),t_hat }\OperatorTok{+}\StringTok{ }\NormalTok{z}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{(V_hat))}
+\NormalTok{ciLow <-}\StringTok{ }\KeywordTok{round}\NormalTok{(IC_ver[}\DecValTok{1}\NormalTok{])}
+\NormalTok{ciHigh <-}\StringTok{ }\KeywordTok{round}\NormalTok{(IC_ver[}\DecValTok{2}\NormalTok{]) }
+\KeywordTok{paste0}\NormalTok{(}\StringTok{"Se estiman "}\NormalTok{, }\KeywordTok{round}\NormalTok{(t_hat) ,}\StringTok{" cuentas verificadas tweeteando sobre Trump con intervalo de confianza ["}\NormalTok{,}
+\NormalTok{       ciLow, }\StringTok{","}\NormalTok{, ciHigh,}\StringTok{"] del 99%"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Se estiman 0 cuentas verificadas tweeteando sobre Trump con intervalo de confianza [0,0] del 99%"
+\end{verbatim}
+
+Para darnos una idea de la proporción de cuentas verificadas, hagamos
+una gráfica de barras que muestre el total de cuentas verificadas y no
+verificadas en la muestra.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Realizamos una gráfica }
+\NormalTok{df <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{cuentas=}\KeywordTok{c}\NormalTok{(}\StringTok{"Verificadas"}\NormalTok{, }\StringTok{"No Verificadas"}\NormalTok{),}
+                 \DataTypeTok{cantidad_tweets=}\KeywordTok{c}\NormalTok{(trus,n1}\OperatorTok{-}\NormalTok{trus))}
+\NormalTok{p<-}\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data=}\NormalTok{df, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\NormalTok{cuentas, }\DataTypeTok{y=}\NormalTok{cantidad_tweets)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{stat=}\StringTok{"identity"}\NormalTok{,}\DataTypeTok{fill=}\StringTok{"lightblue"}\NormalTok{)}
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProyectoSocialMedia_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+\hypertarget{estimar-la-diferencia-promedio-entre-seguidos-y-seguidores-de-los-usarios-que-hablan-acerca-de-trump}{%
+\subsubsection{Estimar la diferencia promedio entre seguidos y
+seguidores de los usarios que hablan acerca de
+Trump}\label{estimar-la-diferencia-promedio-entre-seguidos-y-seguidores-de-los-usarios-que-hablan-acerca-de-trump}}
+
+(i.e.~Followers - Following).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# 3. Estimar la diferencia promedio entre seguidos y seguidores de los usarios que hablan acerca de Trump}
+\CommentTok{#(i.e. Followers - Following).}
+\NormalTok{muestra.usuarios  <-}\StringTok{ }\KeywordTok{users_data}\NormalTok{(data_}\DecValTok{1}\NormalTok{)}
+
+\CommentTok{#Usamos una base de datos más sencilla que nos sirva}
+\NormalTok{user_data <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\StringTok{"user_id"}\NormalTok{ =}\StringTok{ }\NormalTok{muestra.usuarios}\OperatorTok{$}\NormalTok{user_id,}
+                        \StringTok{"Followers"}\NormalTok{ =}\StringTok{ }\NormalTok{muestra.usuarios}\OperatorTok{$}\NormalTok{followers_count,}
+                        \StringTok{"Following"}\NormalTok{ =}\StringTok{ }\NormalTok{muestra.usuarios}\OperatorTok{$}\NormalTok{friends_count,}
+                        \StringTok{"Diferencia"}\NormalTok{ =}\StringTok{ }\NormalTok{muestra.usuarios}\OperatorTok{$}\NormalTok{followers_count}\OperatorTok{-}\NormalTok{muestra.usuarios}\OperatorTok{$}\NormalTok{friends_count)}
+\end{Highlighting}
+\end{Shaded}
+
+Notemos que la diferencia en datos puede ser muy grande, de ahí que para
+que nuestro análisis sea mejor, tennemos que eliminar los ``outliers'':
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{Q          <-}\StringTok{ }\KeywordTok{quantile}\NormalTok{(user_data}\OperatorTok{$}\NormalTok{Diferencia, }\DataTypeTok{probs=}\KeywordTok{c}\NormalTok{(.}\DecValTok{25}\NormalTok{, }\FloatTok{.75}\NormalTok{), }\DataTypeTok{na.rm =} \OtherTok{FALSE}\NormalTok{)}
+\NormalTok{iqr        <-}\StringTok{ }\KeywordTok{IQR}\NormalTok{(user_data}\OperatorTok{$}\NormalTok{Diferencia)}
+\NormalTok{eliminated <-}\StringTok{ }\KeywordTok{subset}\NormalTok{(user_data, user_data}\OperatorTok{$}\NormalTok{Diferencia }\OperatorTok{>}\StringTok{ }\NormalTok{(Q[}\DecValTok{1}\NormalTok{] }\OperatorTok{-}\StringTok{ }\FloatTok{1.5}\OperatorTok{*}\NormalTok{iqr) }\OperatorTok{&}\StringTok{ }\NormalTok{user_data}\OperatorTok{$}\NormalTok{Diferencia }\OperatorTok{<}\StringTok{ }\NormalTok{(Q[}\DecValTok{2}\NormalTok{]}\OperatorTok{+}\FloatTok{1.5}\OperatorTok{*}\NormalTok{iqr))}
+\end{Highlighting}
+\end{Shaded}
+
+Sea Theta el promedio de la cantidad Followers-Following de todos los
+nodos en el universo de twitter. Entonces el estimador de máxima
+verosimilitud, insesgado y consistente del parámetro Theta está dado por
+el promedio de las observaciones en nuestra muestra.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x.barra <-}\StringTok{ }\KeywordTok{mean}\NormalTok{(eliminated}\OperatorTok{$}\NormalTok{Diferencia)}
+\end{Highlighting}
+\end{Shaded}
+
+Partimos del estimador puntual que previamente hemos definido para crear
+un intervalo de confianza al nivel 99\% para el parámetro Theta:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Partimos del estimador puntual que previamente hemos definido para crear un }
+\CommentTok{#intervalo de confianza al nivel 99% para el parámetro Theta.}
+\NormalTok{a            <-}\StringTok{ }\KeywordTok{qnorm}\NormalTok{(}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha}\OperatorTok{/}\DecValTok{2}\NormalTok{)}
+\NormalTok{desv.muestra <-}\StringTok{ }\KeywordTok{sd}\NormalTok{(eliminated}\OperatorTok{$}\NormalTok{Diferencia)}
+\end{Highlighting}
+\end{Shaded}
+
+Realizamos un esquema para visualizar bien los datos:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n <-}\StringTok{ }\KeywordTok{length}\NormalTok{(eliminated}\OperatorTok{$}\NormalTok{Diferencia)}
+\NormalTok{vec <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\NormalTok{n)}
+\KeywordTok{ggplot}\NormalTok{(eliminated, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ vec, }\DataTypeTok{y =}\NormalTok{ Diferencia))}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{stat =} \StringTok{'identity'}\NormalTok{, }\DataTypeTok{fill =} \StringTok{'blue4'}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_hline}\NormalTok{(}\DataTypeTok{yintercept =}\NormalTok{ x.barra, }\DataTypeTok{color =} \StringTok{'firebrick'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProyectoSocialMedia_files/figure-latex/unnamed-chunk-10-1.pdf}
+Ahora tenemos los elementos suficientes para construir nuestro intervalo
+de confianza al nivel 99\%:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{limite.inferior <-}\StringTok{ }\NormalTok{x.barra }\OperatorTok{-}\StringTok{ }\NormalTok{a}\OperatorTok{*}\NormalTok{desv.muestra}
+\NormalTok{limite.superior <-}\StringTok{ }\NormalTok{x.barra }\OperatorTok{+}\StringTok{ }\NormalTok{a}\OperatorTok{*}\NormalTok{desv.muestra}
+\KeywordTok{paste0}\NormalTok{( }\StringTok{"IC: ["}\NormalTok{,}
+\NormalTok{       limite.inferior, }\StringTok{","}\NormalTok{, limite.superior,}\StringTok{"]"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "IC: [-1402.87939742142,762.846339570176]"
+\end{verbatim}
+
+\hypertarget{estimaciuxf3n-de-la-longitud-promedio-de-un-post}{%
+\subsubsection{Estimación de la longitud promedio de un
+post}\label{estimaciuxf3n-de-la-longitud-promedio-de-un-post}}
+
+Una de las preguntas asignadas se refiere a el tamaño promedio de los
+tweets. De donde en primera instancia debemos de obtener la longitud de
+los tweets.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{len<-}\KeywordTok{nchar}\NormalTok{(data1}\OperatorTok{$}\NormalTok{text, }\DataTypeTok{type =} \StringTok{"chars"}\NormalTok{, }\DataTypeTok{allowNA =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{keepNA =} \OtherTok{NA}\NormalTok{)}
+\NormalTok{data1}\OperatorTok{$}\NormalTok{len<-len}
+\end{Highlighting}
+\end{Shaded}
+
+Ahora bien, nosotros tomamos una muestra de tweets utilizando el paquete
+de rtweet. Sin embargo, nos interesa conocer el tamaño promedio de tweet
+de la población. De ahí que necesitamos \(\bar x_U\), la media
+poblacional. Se propone la media muestral como estimador de la muestra
+poblacional.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Demostracion de que la media muestral es un estimador insesgado:
+  \begin{align} \mathrm E(\bar x_s)&= \frac{1}{n}\,\mathrm E{\left(\sum_{i=1}^n x_i\right)}\\&= \frac{1}{n}\,\mathrm E(t_i)\\ &= \frac{1}{n}{\left(\frac{1}{N \atopwithdelims () n}\,\sum_{i=1}^{N \\atopwithdelims () n}t_i\right)}\\ &= \frac{1}{n}\left(\frac{1}{N \atopwithdelims () n}\,\sum_{i=1}^{N \atopwithdelims () n}\left(\sum x_i\right)\right)\\ &= \frac{1}{n}\left(\frac{1}{N \atopwithdelims () n}\,{{N-1\atopwithdelims ()se n-1}\sum_{i=1}^N x_i}\right)\\ &=\frac{1}{N}\sum_{i=1}^{N}y_i\\ &= \overline x_u\;.\end{align}
+\end{enumerate}
+
+Luego entonces, la media muestral es un estimador insesgado de la media
+poblacional.
+
+Ahora bien, si quisieramos un intervalo de confianza de la media debemos
+notar que no conocemos \(\sigma^2\) o la varianza poblacional.
+
+De la teoría de probabilidad sabemos que si \(Z \sim N(0,1)\) and
+\(W \sim \chi^2(s)\), entonces la variable
+\(Y = \frac{Z}{\sqrt{W/\nu}}\) sigue una distribución \(t\) con \(s\)
+grados de libertad.
+
+Luego entonces definimos a Z = \$
+\frac{\sqrt n(\bar x_S − \bar x_U)}{\sigma}\$ la cual se distribuye
+normal estándar. De igual forma, definimos
+\(W = \frac{(n-1)S^2}{\sigma^2}\) sigue una distribución \(\chi^2(s)\)
+con \(n-1\) grados de libertad. De ahí que
+\(Y = \frac{\bar x_S - \bar x_U}{\frac{S}{\sqrt n}}\) sigue una
+distribución \(t\) con \(n-1\) grados de libertad.
+
+De ahí que un intervalo de confianza para \(\bar x_U\) esta dado por
+\(\bar x_S \pm t_{\tiny (n-1, 1-\frac{\alpha}{2})}\frac{\sqrt n}{S}\)
+
+Utilizando lo anteriormente encontrado, tenemos los siguientes
+resultados al insertar el código en R.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{len.bar<-}\StringTok{ }\KeywordTok{mean}\NormalTok{(data1}\OperatorTok{$}\NormalTok{len) }
+\NormalTok{n<-}\KeywordTok{length}\NormalTok{(data1}\OperatorTok{$}\NormalTok{len)}
+\NormalTok{s<-}\KeywordTok{sd}\NormalTok{(len)}
+\end{Highlighting}
+\end{Shaded}
+
+Con su respectivo intervalo de confianza dado por:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{talpha<-}\KeywordTok{qt}\NormalTok{(}\DecValTok{1}\OperatorTok{-}\NormalTok{alpha}\OperatorTok{/}\DecValTok{2}\NormalTok{,n}\DecValTok{-1}\NormalTok{)}
+\NormalTok{ic <-}\StringTok{ }\KeywordTok{round}\NormalTok{(}\KeywordTok{c}\NormalTok{(len.bar }\OperatorTok{-}\StringTok{ }\NormalTok{talpha}\OperatorTok{*}\NormalTok{s}\OperatorTok{/}\KeywordTok{sqrt}\NormalTok{(n), len.bar }\OperatorTok{+}\StringTok{ }\NormalTok{talpha}\OperatorTok{*}\NormalTok{s}\OperatorTok{/}\KeywordTok{sqrt}\NormalTok{(n)), }\DecValTok{2}\NormalTok{)}
+\KeywordTok{paste0}\NormalTok{(}\StringTok{"IC: ["}\NormalTok{,}
+\NormalTok{       ic[}\DecValTok{1}\NormalTok{], }\StringTok{","}\NormalTok{, ic[}\DecValTok{2}\NormalTok{],}\StringTok{"]"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "IC: [149.6,176.48]"
+\end{verbatim}
+
+\hypertarget{sentiment-analysis}{%
+\subsubsection{Sentiment Analysis}\label{sentiment-analysis}}
+
+Para el siguiente punto, buscamos explicar las características
+relacionadas con los tweets que se escriben acerca de Donald Trump. En
+concreto, queremos saber si los posts que se escriben hablan de forma
+positiva, neutral o negativa acerca de Donald Trump. Para esto
+necesitamos realizar algo llamado ``Sentiment Analysis'' o Análisis de
+Sentimientos en español. El análisis de sentimientos es una técnica de
+aprendizaje de maquina que detecta la polaridad dentro de un texto, es
+decir, trata de describir las emociones que el texto presenta. Para
+esto, utilizaremos los paquetes tidyverse y tidytext junto con el
+diccionario ``bing'' realizado por Bing Liu que clasifica las palabras
+en positivas y negativas.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dropwords <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"trump"}\NormalTok{) }\CommentTok{# La palabra "Trump" tiene una conotación en el lexicon}
+
+\NormalTok{sentiment<-data1 }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{unnest_tokens}\NormalTok{(word, text, }\DataTypeTok{token =} \StringTok{'words'}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{left_join}\NormalTok{(}\KeywordTok{get_sentiments}\NormalTok{(}\StringTok{"bing"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(}\OperatorTok{!}\NormalTok{word }\OperatorTok{%in%}\StringTok{ }\NormalTok{dropwords)) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# Obtiene las palabras de sentimiento}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{sentiment =} \KeywordTok{if_else}\NormalTok{(sentiment }\OperatorTok{==}\StringTok{ 'positive'}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{-1}\NormalTok{, }\DataTypeTok{missing =} \DecValTok{0}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# Asigna valores a las palabras de sentimiento }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(user_id) }\OperatorTok{%>%}\StringTok{ }\CommentTok{#Agrupamos las palabras por clave}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{sentiment =} \KeywordTok{sum}\NormalTok{(sentiment))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Joining, by = "word"
+\end{verbatim}
+
+\begin{verbatim}
+## `summarise()` ungrouping output (override with `.groups` argument)
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Agrupamos por tipo de sentimiento del tweet}
+
+\NormalTok{n.positivo<-}\KeywordTok{subset}\NormalTok{(sentiment,sentiment}\OperatorTok{>}\DecValTok{0}\NormalTok{)}\OperatorTok{%>%}\KeywordTok{count}\NormalTok{()}
+\NormalTok{n.positivo}\OperatorTok{$}\NormalTok{class<-}\KeywordTok{c}\NormalTok{(}\StringTok{"Positivos"}\NormalTok{)}
+\NormalTok{n.neutral<-}\KeywordTok{subset}\NormalTok{(sentiment,sentiment}\OperatorTok{==}\DecValTok{0}\NormalTok{)}\OperatorTok{%>%}\KeywordTok{count}\NormalTok{()}
+\NormalTok{n.neutral}\OperatorTok{$}\NormalTok{class<-}\KeywordTok{c}\NormalTok{(}\StringTok{"Neutrales"}\NormalTok{)}
+\NormalTok{n.negativo<-}\KeywordTok{subset}\NormalTok{(sentiment,sentiment}\OperatorTok{<}\DecValTok{0}\NormalTok{)}\OperatorTok{%>%}\KeywordTok{count}\NormalTok{()}
+\NormalTok{n.negativo}\OperatorTok{$}\NormalTok{class<-}\KeywordTok{c}\NormalTok{(}\StringTok{"Negativos"}\NormalTok{)}
+
+\NormalTok{n<-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(n.positivo}\OperatorTok{$}\NormalTok{n }\OperatorTok{+}\StringTok{ }\NormalTok{n.neutral}\OperatorTok{$}\NormalTok{n }\OperatorTok{+}\StringTok{ }\NormalTok{n.negativo}\OperatorTok{$}\NormalTok{n)}
+
+\NormalTok{count.sentiment<-}\KeywordTok{rbind}\NormalTok{(n.positivo,n.neutral,n.negativo)}
+
+\CommentTok{#Realizamos una tabla y un plot }
+\KeywordTok{kable}\NormalTok{(count.sentiment, }\DataTypeTok{booktabs =}\NormalTok{ T) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{latex_options =} \StringTok{"striped"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{rl}
+\toprule
+n & class\\
+\midrule
+\rowcolor{gray!6}  66 & Positivos\\
+102 & Neutrales\\
+\rowcolor{gray!6}  114 & Negativos\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(count.sentiment)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_col}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ class, }\DataTypeTok{y =}\NormalTok{ n), }\DataTypeTok{color=}\StringTok{'skyblue'}\NormalTok{, }\DataTypeTok{fill=}\StringTok{'steelblue'}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}
+    \DataTypeTok{title =} \StringTok{"Conteo de Sentimientos de Tweets de Trump"}\NormalTok{,}
+    \DataTypeTok{x =} \StringTok{"Tipo de Sentimiento"}\NormalTok{,}
+    \DataTypeTok{y =} \StringTok{"Conteo"}
+\NormalTok{  ) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x=}\KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle=}\DecValTok{45}\NormalTok{, }\DataTypeTok{hjust=}\DecValTok{1}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ProyectoSocialMedia_files/figure-latex/unnamed-chunk-15-1.pdf}
+
+Utilizando lo descrito anteriormente obtenemos los siguientes
+resultados:
+
+Ahora bien, notemos que únicamente tenemos una muestra. Pero notemos que
+se trata de una muestra estratificada, donde cada estrato es la postura
+de cada tweet. Luego entonces, utilizamos la \(N\) obtenida previamente
+mediante captura y recaptura. Ahora bien, para obtener el total
+poblacional utilizamos la fórmula obtenida en clases dada por
+\(n_h = n \frac{N_h}{N}\). Aquí buscamos \(N_h\), de ahí que realizamos
+el despeje dado por: \(N_h = N \frac{n_h}{n}\). Con lo anterior
+obtenemos los siguientes resultados.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{N.positivo <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(n.positivo}\OperatorTok{$}\NormalTok{n)}\OperatorTok{/}\NormalTok{n }\OperatorTok{*}\StringTok{ }\NormalTok{N}
+\NormalTok{N.negativo <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(n.negativo}\OperatorTok{$}\NormalTok{n)}\OperatorTok{/}\NormalTok{n }\OperatorTok{*}\StringTok{ }\NormalTok{N}
+\NormalTok{N.neutral  <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(n.neutral}\OperatorTok{$}\NormalTok{n)}\OperatorTok{/}\NormalTok{n }\OperatorTok{*}\StringTok{ }\NormalTok{N}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{estimar-seguidores-de-trump-fuera-de-eu}{%
+\subsubsection{Estimar seguidores de Trump fuera de
+EU}\label{estimar-seguidores-de-trump-fuera-de-eu}}
+
+Obtenemos una muestra aleatoria de 5,000 followers de Trump: De nuevo,
+tuvimos problemas para utilizar el paquete rtweet desde R Markdown por
+lo que presentamos el código que usamos para extraer tweets y luego lo
+leemos como un rds.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#}
+\NormalTok{muestra_aux       <-}\StringTok{ }\KeywordTok{get_followers}\NormalTok{(}\StringTok{"realDonaldTrump"}\NormalTok{, }\DataTypeTok{n =} \DecValTok{5000}\NormalTok{)}
+\NormalTok{muestra_aux1      <-}\StringTok{ }\KeywordTok{lookup_users}\NormalTok{(muestra_aux}\OperatorTok{$}\NormalTok{user_id)}
+\NormalTok{muestra_followers <-}\StringTok{ }\KeywordTok{users_data}\NormalTok{(muestra_aux1)}
+\KeywordTok{saveRDS}\NormalTok{(muestra_followers,}\DataTypeTok{file =} \StringTok{"muestraTrump.rds"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{muestra_followers <-}\StringTok{ }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{readRDS}\NormalTok{(}\StringTok{'muestraTrump.rds'}\NormalTok{))}
+\CommentTok{#Aplicamos la función users_data para obtener la información de su ubicación}
+
+
+\CommentTok{#Eliminamos de nuestra base de datos aquellas entradas que no tienen especificada}
+\CommentTok{#una ubicación}
+\NormalTok{muestra_followers <-}\StringTok{ }\NormalTok{muestra_followers}\OperatorTok{%>%}\KeywordTok{filter}\NormalTok{(location }\OperatorTok{!=}\StringTok{ ""}\NormalTok{)}
+
+\CommentTok{#Obtenemos el tamaño real de nuestra muestra}
+\NormalTok{n_muestra         <-}\StringTok{ }\KeywordTok{length}\NormalTok{(muestra_followers}\OperatorTok{$}\NormalTok{user_id)}
+
+\CommentTok{#Ahora nos quedamos con los usuarios que tweetean desde Estados Unidos}
+\NormalTok{muestra_followers <-}\StringTok{ }\NormalTok{muestra_followers}\OperatorTok{%>%}\KeywordTok{filter}\NormalTok{(}\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"USA"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"United States"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", AL"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", AK"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", AZ"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", AR"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", CA"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", CO"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", CT"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", DE"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", FL"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", GA"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", HI"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", ID"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", IL"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", IN"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", IA"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", KS"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", KY"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", LA"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", ME"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", MD"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", MA"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", MI"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", MN"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", MS"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", MO"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", MT"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", NE"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", NV"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", NH"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", NJ"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", NM"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", NY"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", NC"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", ND"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", OH"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", OK"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", OR"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", PA"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", RI"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", SC"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", SD"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", TN"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", TX"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", UT"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", VT"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", VA"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", WA"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", WV"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", WI"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", WY"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{", DC"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Alabama"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Alaska"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Arizona"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Arkansas"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"California"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Colorado"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Connecticut"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Delaware"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Florida"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Georgia"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Hawaii"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Idaho"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Illinois"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Indiana"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Iowa"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Kansas"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Kentucky"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Louisiana"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Maine"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Maryland"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Massachusetts"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Michigan"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Minnesota"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Mississippi"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Missouri"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Montana"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Nebraska"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Nevada"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"New Hampshire"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"New Jersey"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"New Mexico"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"New York"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"North Carolina"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"North Dakota"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Ohio"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Oklahoma"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Oregon"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Pennsylvania"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Rhode Island"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"South Carolina"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"South Dakota"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Tennessee"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Texas"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Utah"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Vermont"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Virginia"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Washington"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"West Virginia"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Wisconsin"}\NormalTok{)}\OperatorTok{|}
+\StringTok{                                                  }\KeywordTok{str_detect}\NormalTok{(location, }\StringTok{"Wyoming"}\NormalTok{)}
+\NormalTok{)}
+
+\CommentTok{#Obtenemos la cantidad de usuarios de nuestra muestra que no tweetean desde Estados Unidos}
+\NormalTok{n_extranjeros <-}\StringTok{ }\NormalTok{n_muestra}\OperatorTok{-}\KeywordTok{length}\NormalTok{(muestra_followers}\OperatorTok{$}\NormalTok{user_id)}
+
+
+\CommentTok{#Estimamos la proporción de de tweets extranjeros}
+\NormalTok{estim         <-}\StringTok{ }\NormalTok{n_extranjeros}\OperatorTok{/}\NormalTok{n_muestra}
+
+\CommentTok{#A partir de esta estimación puntual de la proporción de followers extranjeros de Trump}
+\CommentTok{#crearemos un intervalo de confianza a nivel 99%}
+\NormalTok{N                 <-}\StringTok{ }\DecValTok{83650000} \CommentTok{#Numero total de followers de Trump }
+\NormalTok{alpha             <-}\StringTok{ }\FloatTok{0.01}
+\NormalTok{Z                 <-}\StringTok{ }\KeywordTok{qnorm}\NormalTok{(}\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{alpha}\OperatorTok{/}\DecValTok{2}\NormalTok{)}
+\NormalTok{varianza.gorro    <-}\StringTok{ }\NormalTok{estim}\OperatorTok{*}\NormalTok{(}\DecValTok{1}\OperatorTok{-}\NormalTok{estim)}\OperatorTok{*}\NormalTok{(N }\OperatorTok{-}\StringTok{ }\NormalTok{n_muestra)}\OperatorTok{/}\NormalTok{n_muestra}\OperatorTok{/}\NormalTok{(N}\DecValTok{-1}\NormalTok{)}
+\NormalTok{limite.inferior   <-}\StringTok{ }\NormalTok{estim }\OperatorTok{-}\StringTok{ }\NormalTok{Z}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{(varianza.gorro)}
+\NormalTok{limite.superior   <-}\StringTok{ }\NormalTok{estim }\OperatorTok{+}\StringTok{ }\NormalTok{Z}\OperatorTok{*}\KeywordTok{sqrt}\NormalTok{(varianza.gorro)}
+\KeywordTok{paste0}\NormalTok{(}\StringTok{"IC: ["}\NormalTok{,}
+\NormalTok{       limite.inferior, }\StringTok{","}\NormalTok{, limite.superior,}\StringTok{"]"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "IC: [0.656980980887364,0.727770792162282]"
+\end{verbatim}
+
+\hypertarget{conclusiuxf3n}{%
+\subsection{Conclusión}\label{conclusiuxf3n}}
+
+La opinión de la gente es algo sumamente relevante en algunos temas y
+simplemente es difícil de ignorar. A través del análisis de sentimiento
+y la minería de datos en redes se puede construir una idea bastante
+fidedigna de la percepción que está teniendo la gente sobre una marca,
+producto, negocio, tema polémico o persona. Esto no es poca cosa ya que
+el tener esta posibilidad, podemos utilizar la información para tomar
+mejores decisiones sobre estrategias políticas o de negocio.
+
+\hypertarget{referencias}{%
+\subsection{Referencias}\label{referencias}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Repositorio de JBGruber ** recover\_stream.R**. Link:
+  \url{https://gist.github.com/JBGruber/dee4c44e7d38d537426f57ba1e4f84ab}
+\item
+  Lohr, S. L. (2019). Sampling design and analysis. Boca Raton, FL: CRC
+  Press.
+\end{enumerate}
+
+\end{document}

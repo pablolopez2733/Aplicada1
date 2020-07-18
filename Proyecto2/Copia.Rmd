@@ -47,12 +47,11 @@ library(tidytext)
 library(tidyverse) 
 library(tmaptools)
 
+
 ```
 ### Extracción de los Tweets muestra
-Este es el código que originalmente utilizamos para extraer las muestras pero R markdown no puede hacer el render. Por lo que hubo que correr estas líneas por separado en un script y posteriormente leer los archivos RDS generados.
 
-
-```{r,tidy=TRUE,eval=FALSE}
+```{r tidy=TRUE}
 #Parte 1: Importamos los tweets y los convertimos en una base de datos. 
 #SegÃºn el link https://github.com/ropensci/rtweet/issues/356 existe un error en la configuraciÃ³n 
 #de rTweet cuando usamos files de tipo json, luego entonces utilizamos el fix proporcionado en el 
@@ -166,17 +165,6 @@ stream_tweets(      "Trump",
 data_2<-recover_stream(file.name2)
 data_2 <- as.data.frame(data_2)
 
-
-```
-
-#### Lectura de los RDS
-
-```{r , tidy=TRUE}
-
-
-data_1 <- as.data.frame(readRDS(file = 'data_1.rds'))
-data_2 <- as.data.frame(readRDS(file = 'data_2.rds'))
-
 #Para ambos data.frames nos quedamos con las variables de relevancia
 data1<- data_1 %>% select(user_id, status_id, screen_name, text,verified)
 data2<-data_2 %>% select(user_id, status_id, screen_name, text, verified)
@@ -187,7 +175,6 @@ r<-rbind(data1,data2)
 r.len <- r%>%count()
 unicos <- r %>% distinct(text)%>%tally()%>%as.numeric() 
 repetidos<- r.len - unicos
-
 ```
 
 
@@ -273,7 +260,37 @@ p
 
 ### Estimar la diferencia promedio entre seguidos y seguidores de los usarios que hablan acerca de Trump
 (i.e. Followers - Following).
+La solución a este problema se reduce a la estimación de una media poblacional,
+puesto que cada uno de los usuarios de twitter representa un número, a saber,
+el cantidad dada por $Followers-Following$.  
+Como hemos visto en clase, la media de una muestra $\mathcal{S}$ es un estimador insesgado de la media
+poblacional puesto que $$\mathbb{E}[\bar{X}] =
+\mathbb{E}[\frac{1}{n}\sum_{i=1}^{N}x_{i}\mathbb{I}_{\mathcal{S}}(x_{i})]=
+\frac{1}{n}\sum_{i=1}^{N}\mathbb{E}[x_{i}\mathbb{I}_{\mathcal{S}}(xi)]=
+\frac{1}{n}\sum_{i=1}^{N}x_{i}\frac{n}{N}= 
+\frac{1}{N}\sum_{i=1}^{N}x_{i}$$
+A partir de este resultado y utilizando la modificación del Teorema Central del Límite
+para muestras aleatorias finitas podemos construir un intervalo de confianza a 
+nivel 99% a partir del intervalo aleatorio dado por:
+$$\bar{X}_{\mathcal{S}} \pm z_{\alpha/2}\sqrt{Var(\bar{X}_{\mathcal{S}})}$$
+Bajo este marco teórico, los pasos a seguir para resolver el problema son los
+siguientes:  
 
+* Obtener una muestra aleatoria de usuarios de twitter  
+
+  + Usar la función `stream_tweets()`para obtener una muestra aleatoria de tweets  
+  
+  + Obtener el id del usuario que hizo el tweet medinate la función `users_data()`  
+  
+* Para cada uno de los usuarios de la muestra, obtener la diferencia $Followers- Following$  
+
+  + Creamos una base de datos que contenga el numero de usuario, número de seguidores,
+  número de seguidos y el valor de la diferencia.  
+  
+* Calculamos la media de los datos que obtuvimos en la muestra  
+
+*Calculamos el intervalo de confianza  
+A continucación se muestra el código:
 ```{r,tidy=TRUE}
 # 3. Estimar la diferencia promedio entre seguidos y seguidores de los usarios que hablan acerca de Trump
 #(i.e. Followers - Following).
@@ -285,39 +302,29 @@ user_data <- data.frame("user_id" = muestra.usuarios$user_id,
                         "Following" = muestra.usuarios$friends_count,
                         "Diferencia" = muestra.usuarios$followers_count-muestra.usuarios$friends_count)
 ```
-
-Notemos que la diferencia en datos puede ser muy grande, de ahí que para que nuestro
-análisis sea mejor, tennemos que eliminar los "outliers": 
-
-```{r,tidy=TRUE}
-
-Q          <- quantile(user_data$Diferencia, probs=c(.25, .75), na.rm = FALSE)
-iqr        <- IQR(user_data$Diferencia)
-eliminated <- subset(user_data, user_data$Diferencia > (Q[1] - 1.5*iqr) & user_data$Diferencia < (Q[2]+1.5*iqr))
-```
 Sea Theta el promedio de la cantidad Followers-Following de todos los nodos en 
 el universo de twitter. Entonces el estimador de máxima verosimilitud, insesgado 
 y consistente del parámetro Theta está dado por el promedio de las observaciones 
 en nuestra muestra.
 ```{r,tidy=TRUE}
 
-x.barra <- mean(eliminated$Diferencia)
+x.barra <- mean(user_data$Diferencia)
 ```
 Partimos del estimador puntual que previamente hemos definido para crear un 
  intervalo de confianza al nivel 99% para el parámetro Theta:
 ```{r,tidy=TRUE}
 
-
-#Partimos del estimador puntual que previamente hemos definido para crear un 
-#intervalo de confianza al nivel 99% para el parámetro Theta.
+n            <- length(user_data$Diferencia) #Tamaño de la muestra
+N            <- 330000000             #Cantidad de usuarios activos en twitter en el último mes
+                                      #Fuente https://www.statista.com/statistics/282087/number-of-monthly-active-twitter-users/
 a            <- qnorm(1-alpha/2)
-desv.muestra <- sd(eliminated$Diferencia)
+desv.xbarra  <- sqrt((1-n/N)*var(user_data$Diferencia)/n)
 ```
 Realizamos un esquema para visualizar bien los datos:
 ```{r,tidy=TRUE}
-n <- length(eliminated$Diferencia)
+n   <- length(user_data$Diferencia)
 vec <- seq(1:n)
-ggplot(eliminated, aes(x = vec, y = Diferencia))+
+ggplot(user_data, aes(x = vec, y = Diferencia))+
   geom_bar(stat = 'identity', fill = 'blue4')+
   geom_hline(yintercept = x.barra, color = 'firebrick')
 
@@ -326,8 +333,8 @@ Ahora tenemos los elementos suficientes para construir nuestro intervalo de
  confianza al nivel 99%: 
 ```{r,tidy=TRUE}
 
-limite.inferior <- x.barra - a*desv.muestra
-limite.superior <- x.barra + a*desv.muestra
+limite.inferior <- x.barra - a*desv.xbarra
+limite.superior <- x.barra + a*desv.xbarra
 paste0( "IC: [",
        limite.inferior, ",", limite.superior,"]")
 ```
@@ -345,7 +352,7 @@ Ahora bien, nosotros tomamos una muestra de tweets utilizando el paquete de rtwe
 Sin embargo, nos interesa conocer el tamaño promedio de tweet de la población. De ahí que necesitamos $\bar x_U$, la media poblacional. Se propone la media muestral como estimador de la muestra poblacional. 
 
 1. Demostracion de que la media muestral es un estimador insesgado:
-\begin{align} \mathrm E(\bar x_s)&= \frac{1}{n}\,\mathrm E{\left(\sum_{i=1}^n x_i\right)}\\&= \frac{1}{n}\,\mathrm E(t_i)\\ &= \frac{1}{n}{\left(\frac{1}{N \atopwithdelims () n}\,\sum_{i=1}^{N \\atopwithdelims () n}t_i\right)}\\ &= \frac{1}{n}\left(\frac{1}{N \atopwithdelims () n}\,\sum_{i=1}^{N \atopwithdelims () n}\left(\sum x_i\right)\right)\\ &= \frac{1}{n}\left(\frac{1}{N \atopwithdelims () n}\,{{N-1\atopwithdelims ()se n-1}\sum_{i=1}^N x_i}\right)\\ &=\frac{1}{N}\sum_{i=1}^{N}y_i\\ &= \overline x_u\;.\end{align}
+$\begin{align} \mathrm E(\bar x_s)&= \frac{1}{n}\,\mathrm E{\left(\sum_{i=1}^n x_i\right)}\\&= \frac{1}{n}\,\mathrm E(t_i)\\ &= \frac{1}{n}{\left(\frac{1}{N \choose n}\,\sum_{i=1}^{N \choose n}t_i\right)}\\ &= \frac{1}{n}\left(\frac{1}{N \choose n}\,\sum_{i=1}^{N \choose n}\left(\sum x_i\right)\right)\\ &= \frac{1}{n}\left(\frac{1}{N \choose n}\,{{N-1\choose n-1}\sum_{i=1}^N x_i}\right)\\ &=\frac{1}{N}\sum_{i=1}^{N}y_i\\ &= \overline x_u\;.\end{align}$
 
 Luego entonces, la media muestral es un estimador insesgado de la media poblacional.
 
@@ -432,21 +439,57 @@ N.neutral  <- as.numeric(n.neutral$n)/n * N
 
 
 ### Estimar seguidores de Trump fuera de EU
+En este apartado se pretende conocer la reelevancia cultural de Donald Trump en
+el extranjero. Entiéndase por extranjero, por supuesto, a la población que reside
+fuera de Estados Unidos. La hipótesis es simple: tanta más reelevancia cultural
+tendrá Donald Trump, cuanto mayor sea la proporción de usuarios extranjeros que
+lo siguen. Así pues, nuestra tarea se traduce en la construcción de un intervalo
+de confianza para la proporción $p$ de seguidores de Donald Trump que residen fuera
+de los Estados Unidos.  
+El problema de estimar una proporción dada una población finita ha sido abordado
+en el salón de clases, con lo cual, a continuación se resumen los aspectos más importantes
+del estimador que hemos elegiddo para la proporción $p$.
+Dada una población finita $U$ de $N$ elementos y un subconjunto $A$ de esa población,
+si lo que pretendemos es estimar la proporción $p = \frac{|A|}{|U|}$ entonces un buen
+estimador dada una muestra de tamaño $n$, en el sentido de que es insesgado y 
+consistente, está dado por:
+$$\hat{p}=\frac{1}{n}\sum_{i=1}^{n}\mathbb{I}_{A}(x_{i})$$  
+El insesgamiento se sigue del hecho de que:  
+$$\mathbb{E}[\hat{p}]=  
+\mathbb{E}[\frac{1}{n}\sum_{i=1}^{n}\mathbb{I}_{A}(x_{i})]=  
+\frac{1}{n}\mathbb{E}[\sum_{i=1}^{n}\mathbb{I}_{A}(x_{i})]=  
+\frac{1}{n}\sum_{i=1}^{n}\mathbb{E}[\mathbb{I}_{A}(x_{i})]=  
+\frac{1}{n}np=
+p$$ 
+Además, la varianza del estimador está dada por:
+$$Var(\hat{p})=\frac{p(1-p)}{n}\frac{N-n}{N-1}$$
+La consistencia del estimador es evidente, en tanto que su error cuadrático medio
+coincide, en este caso, con su varianza. Así pues, tomamos el límite cuando el tamaño
+de nuestra muestra tiende al tamaño de nuestra población para probar la consistencia:
+$$\lim_{n \to N}Var(\hat{p}) = 0$$
+Es claro que si aquello que pretendemos estimar es el valor de $p$, no podremos
+calcular el valor real de la varianza del estimador $\hat{p}$. Este hecho es crucial en virtud
+de que necesitaremos conocer el valor de la varianza para poder construir un
+intervalo de confianza. Una forma de arreglar este problema es, por muy repetitivo que suene, estimar la varianza
+del estimador de la siguiente forma:
+$$\widehat{Var(\hat{p})}=\frac{\hat{p}(1-\hat{p})}{n}\frac{N-n}{N-1}$$
+De esta forma, si aplicamos el Teorema Central del Límite para construir un intervalo
+de confianza nivel $(1-\alpha)$x$100$% para la proporción $p$ obtenemos el siguientes
+limites de nuestro intervalo aleatorio:
+$$\hat{p}\pm z_{\alpha/2}\sqrt{\widehat{Var(\hat{p})}}$$
+Este intervalo aleatorio captura el verdadero valor del parámetro $p$ con probabilidad $1-\alpha$.
+Siguiendo este esquema teórico, ahora podemos aplicarlo para responder a la pregunta que nos
+atañe en esta sección, a saber, ¿qué proporción de seguidores de Donald Trump reside
+fuera de los Estados Unidos? A continucación se presenta el código utilizado.
 Obtenemos una muestra aleatoria de 5,000 followers de Trump:
-De nuevo, tuvimos problemas para utilizar el paquete rtweet desde R Markdown por lo que presentamos el código que usamos para extraer tweets y luego lo leemos como un rds. 
-```{r,tidy=TRUE,eval=FALSE}
+```{r,tidy=TRUE}
 
 #
 muestra_aux       <- get_followers("realDonaldTrump", n = 5000)
 muestra_aux1      <- lookup_users(muestra_aux$user_id)
-muestra_followers <- users_data(muestra_aux1)
-saveRDS(muestra_followers,file = "muestraTrump.rds")
 
-```
-```{r, tidy=TRUE}
-muestra_followers <- as.data.frame(readRDS('muestraTrump.rds'))
 #Aplicamos la función users_data para obtener la información de su ubicación
-
+muestra_followers <- users_data(muestra_aux1)
 
 #Eliminamos de nuestra base de datos aquellas entradas que no tienen especificada
 #una ubicación

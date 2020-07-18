@@ -224,7 +224,7 @@ Es decir, nuestro estimador $\hat{t}$ es insesgado.
 Obtengamos entonces un estimador del total con su respectivo intervalo de confianza al 99%:
 
 
-```{r tidy=TRUE}
+```{r , tidy=TRUE}
 
 #Obtenemos nuestra N
 n1 <- nrow(data1)
@@ -238,8 +238,9 @@ N <- as.numeric(N) *100 #Notamos que es el 1% de la muestra
 verified <- data_1 %>% select(user_id,verified)
 trus <- length (verified$verified[verified$verified==TRUE])
 
-cols <- sapply(verified, is.logical)
-verified[,cols] <- lapply(verified[,cols], as.numeric)
+#cols <- sapply(verified, is.logical)
+#verified[,cols] <- lapply(verified[,cols], as.numeric)
+verified$verified <- as.numeric(verified$verified)
 
 x_s <- mean(verified$verified)
 t_hat <- N*(1/n1)*(sum(verified$verified))*100
@@ -263,6 +264,7 @@ ciLow <- round(IC_ver[1])
 ciHigh <- round(IC_ver[2]) 
 paste0("Se estiman ", round(t_hat) ," cuentas verificadas tweeteando sobre Trump con intervalo de confianza [",
        ciLow, ",", ciHigh,"] del 99%")
+
 ```
 Para darnos una idea de la proporción de cuentas verificadas, hagamos una gráfica de barras que muestre el total de 
 cuentas verificadas y no verificadas en la muestra. 

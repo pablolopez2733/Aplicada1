@@ -1,0 +1,77 @@
+---
+title:  'Proyecto 3'
+author:
+- Fernando Stein Vallarta 165455
+- Pablo López Landeros 178863
+- Manuel García Garduño 162136
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+**Objetivo**: El objetivo de este proyecto es estudiar y analizar los niveles de violencia y criminalidad presentes en México. Esto se hará a través de estimadores y conceptos vistos en clase y con la base de datos de la **Encuesta Nacional de Victimización y Percepción sobre Seguridad Pública (ENVIPE) 2019**. En particular, nos centraremos en los delitos de robo, secuestro y homicidio. A pesar de que haremos un análisis nacional, dedicaremos buena parte del análisis a los datos de la CDMX por ser nuestro lugar de residencia.   
+
+## Introducción   
+
+### ENVIPE   
+La Encuesta Nacional de Victimización y Percepción sobre Seguridad Pública (ENVIPE) del INEGI es una fuente de datos muy valiosa para los expertos en seguridad pública. Esta encuesta forma parte de los proyectos impulsados por el Subsistema Nacional de Información de Gobierno, Seguridad Pública e Impartición de Justicia (SNIGSPIJ), y está coordinado por el Instituto Nacional de Estadística y Geografía (INEGI). 
+
+* Objetivo de la encuesta:  El INEGI enlista los siguientes rubros como los objetivos de la ENVIPE:
+    1. Medir la victimización del hogar y la victimización personal
+    2. Estimar el número de víctimas
+    3. Estimar el número de delitos ocurridos. 
+    4. Estimar la "cifra negra de los delitos y sus causas.
+    5. Medir la percepción actual de los habitantes del país sobre la seguridad en el lugar donde viven y donde realizan sus actividades cotidianas. 
+    6. Medir el grado de confianza en las instituciones de seguridad pública y la percepción sobre su desempeño.
+    7. Identificar y medir los cambios en actividades y hábitos de las personas por temor al delito.
+    8. Estimar los costos de la delicuencia a las personas y hogares.
+    9. Estimar las repercusiones del delito sobre las víctimas.
+    10. Identificar y medir actitudes y experiencias de las víctimas con las instituciones de seguridad pública y de procuración de justicia.
+
+* Metodología de la encuesta: 
+    * Población objetivo: La encuesta está dirigida a la población de 18 años cumplidos o más, que residen permanentemente en viviendas particulares dentro del territorio nacional.
+    * Cobertura geográfica: La encuesta fue diseñada para dar resultados a los siguientes niveles de segregación:   
+    Nacional:
+        1. Urbano
+        2. Rural
+    Entidad federativa   
+    CDMX (4 regiones):
+            1. Norte
+            2. Sur
+            3. Oriente
+            4. Poniente 
+   
+    
+* Diseño estadístico:     
+
+   
+   
+
+|  	|  	|
+|-	|-	|
+| Periodo de referencia de la información 	| Enero-diciembre de 2018 para victimización<br>Marzo- abril de 2019 para percepción sobre la seguridad <br>pública y desempeño de las autoridades. 	|
+| Selección de la muestra 	| Probabilístico: trietápico, estratificado y <br>por conglomerados. 	|
+| Unidades de observación 	| Las viviendas seleccionadas, los hogares, <br>los residentes del hogar y la persona <br>seleccionada en el hogar.  	|
+| Población objeto del estudio 	| Población de 18 años y más. 	|
+| Tamaño de muestra nacional 	| 102,043 viviendas 	|
+| Periodo de levantamiento 	| 1 de marzo al 30 de abril de 2019 	|
+| Cobertura geográfica 	| A nivel nacional, Nacional urbano, Nacional rural, <br>Entidad Federativa y Áreas Metropolitanas de interés.  	|
+
+
+**Nota:** Toda esta información fue extraída directamente de la documentación que provee el INEGI como parte de la encuesta. 
+
+
+
+
+
+## Referencias:   
+
+
+* Salazar, C. F. S. (2019). ENVIPE. Consultado el 23 de julio de 2020, en http://bdsocial.inmujeres.gob.mx/index.php/envipe-290   
+* I. (n.d.). INEGI. Consultado el 23 de julio de 2020, en https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825191184

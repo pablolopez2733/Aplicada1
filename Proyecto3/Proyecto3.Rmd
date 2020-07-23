@@ -69,10 +69,46 @@ La Encuesta Nacional de Victimización y Percepción sobre Seguridad Pública (E
 
 
 ## Análisis
+Importamos librerías y leemos la base de datos desde un repositorio en Github.:
+
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
+#Paquetes requeridos
+library(tidyverse) 
+library(cowplot)
+library(kableExtra)
+library(knitr) 
+library(lubridate)
+library(dplyr) 
+library(moments) 
+library(readr)
+library(rgdal)
+library(broom)
+library(scales)
+library(lemon)
+knit_print.data.frame <- lemon_print
+
+#Lectura de Datos y Diccionario
+
+delitos <- read_csv("https://raw.githubusercontent.com/pablolopez2733/Aplicada1/master/Bases%20de%20Datos/conjunto_de_datos_envipe2019_csv/conjunto_de_datos_TMod_Vic_ENVIPE_2019/conjunto_de_datos/conjunto_de_datos_TMod_Vic_ENVIPE_2019.csv")
 
 
+diccionario  <- read_csv("https://github.com/pablolopez2733/Aplicada1/raw/master/Bases%20de%20Datos/conjunto_de_datos_envipe2019_csv/conjunto_de_datos_TMod_Vic_ENVIPE_2019/diccionario_de_datos/diccionario_de_datos_TMod_Vic_ENVIPE_2019.csv", 
+    locale = locale(encoding = "WINDOWS-1252"))
 
 
+```
+Diccionario:
+```{r caption="Data frame is now printed using `kable`.",render=lemon_print}
+diccionario
+```
+
+
+Obtenemos valores unicos:
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
+
+num.pers  <- delitos %>% distinct(ID_PER) %>% tally() %>% as.numeric()
+
+```
 
 ## Referencias:   
 

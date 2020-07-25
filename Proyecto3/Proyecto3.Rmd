@@ -66,6 +66,9 @@ La Encuesta Nacional de Victimización y Percepción sobre Seguridad Pública (E
 
 **Nota:** Toda esta información fue extraída directamente de la documentación que provee el INEGI como parte de la encuesta. 
 
+* Muestreo   
+La encuesta se realizó bajo un modelo **trietápico** en donde la primera etapa fue por unidad primaria de muestreo. La segunda fue por vivienda y la tercera fue por personas que habitaban en dicha vivienda.    
+
 
 
 ## Análisis
@@ -85,14 +88,15 @@ library(rgdal)
 library(broom)
 library(scales)
 library(lemon)
+library(ggplot2)
 knit_print.data.frame <- lemon_print
 
 #Lectura de Datos y Diccionario
 
-delitos <- read_csv("https://raw.githubusercontent.com/pablolopez2733/Aplicada1/master/Bases%20de%20Datos/conjunto_de_datos_envipe2019_csv/conjunto_de_datos_TMod_Vic_ENVIPE_2019/conjunto_de_datos/conjunto_de_datos_TMod_Vic_ENVIPE_2019.csv")
+df <-  read_csv("https://raw.githubusercontent.com/pablolopez2733/Aplicada1/master/Bases%20de%20Datos/conjunto_de_datos_envipe2019_csv/conjunto_de_datos_TPer_Vic2_ENVIPE_2019/conjunto_de_datos/conjunto_de_datos_TPer_Vic2_ENVIPE_2019.csv")
 
 
-diccionario  <- read_csv("https://github.com/pablolopez2733/Aplicada1/raw/master/Bases%20de%20Datos/conjunto_de_datos_envipe2019_csv/conjunto_de_datos_TMod_Vic_ENVIPE_2019/diccionario_de_datos/diccionario_de_datos_TMod_Vic_ENVIPE_2019.csv", 
+diccionario  <-  read_csv("https://github.com/pablolopez2733/Aplicada1/raw/master/Bases%20de%20Datos/conjunto_de_datos_envipe2019_csv/conjunto_de_datos_TPer_Vic2_ENVIPE_2019/diccionario_de_datos/diccionario_de_datos_TPer_Vic2_ENVIPE_2019.csv", 
     locale = locale(encoding = "WINDOWS-1252"))
 
 
@@ -106,9 +110,89 @@ diccionario
 Obtenemos valores unicos:
 ```{r,tidy=TRUE, message=FALSE, warning=FALSE}
 
-num.pers  <- delitos %>% distinct(ID_PER) %>% tally() %>% as.numeric()
+num.pers  <- df %>% distinct(ID_PER) %>% tally() %>% as.numeric()
 
 ```
+
+ **Validación de la $n$**:    
+ 
+El INEGI sugiere la siguiente expresión para poder determinar el tamaño de la muestra:
+$$n = \frac{(Z^2(1-p)DEFF)}{(r^2 p (1-t))}  $$
+
+ Donde:   
+ 
+ * Z es el valor de la norma,
+ * DEFF es el cociente de la varianza del diseño utilizado entre la varianza obtenida considerando un MAS 
+ * t es la tasa de no respuesta
+ * r es el error relativo
+ * p es la proporción muestreada
+ 
+El INEGI sugiere los siguientes parámetros:   
+
+* t = .75, 
+* p = .011, 
+* r = .07635, 
+* DEFF = 0.07635
+* I.C. de 90% ($\alpha = .1$)
+
+
+
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
+
+#Tamaño de la muestra
+
+alp<-.1
+z<-qnorm(1-alp/2)
+p<-.011
+q<-1-p
+e<-.07635
+DEFF<-2.078
+t<-.15
+
+A<- z^2 * q* DEFF
+B<- e^2*p*(1-t)
+n<- A/B
+
+#Sin embargo, solamente tenemos que considerar el 
+#25.33% de los cuestionarios contestados de forma correcta
+#con victimización como parte de nuestra muestra
+
+n.vic<-n*.2533
+
+```
+
+## Gráficas
+Veamos la distribución de hombres y mujeres dentro de la muestra:
+
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
+
+num.hombres <- df %>% filter(SEXO == "1\r") %>% tally() %>% as.numeric()
+num.mujeres <- df %>% filter(SEXO == "2\r") %>% tally() %>% as.numeric()
+
+df<- df %>% mutate(Sexo= ifelse(SEXO== "1\r", "HOMBRE", "MUJER"))
+
+hombres.delito <- df %>% filter(Sexo == "HOMBRE" & AP6_2 =="1\r") %>% count()
+mujeres.delito <- df %>% filter(Sexo == "MUJER" & AP6_2 =="1\r") %>% count()
+df_1 <- as.data.frame(rbind(hombres.delito,mujeres.delito))
+
+df_1 <- cbind(df_1,c("Hombres","Mujeres"))
+
+names(df_1)[1] <- "Conteo_de_delitos"
+names(df_1)[2] <- "Sexo"
+
+
+ggplot(df_1,aes(x=Sexo,y=Conteo_de_delitos))+
+  geom_bar (stat="identity", width=0.7)+
+  scale_fill_manual(values=c("#1f50bd","#ce2393"))+
+  theme_minimal()
+
+
+
+
+
+```
+
+
 
 ## Referencias:   
 

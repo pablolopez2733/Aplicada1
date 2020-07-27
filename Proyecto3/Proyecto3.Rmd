@@ -11,6 +11,7 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
 
@@ -67,7 +68,7 @@ La Encuesta Nacional de Victimización y Percepción sobre Seguridad Pública (E
 **Nota:** Toda esta información fue extraída directamente de la documentación que provee el INEGI como parte de la encuesta. 
 
 * Muestreo   
-La encuesta se realizó bajo un modelo **trietápico** en donde la primera etapa fue por unidad primaria de muestreo. La segunda fue por vivienda y la tercera fue por personas que habitaban en dicha vivienda.    
+La encuesta se realizó bajo un modelo **trietápico** en donde la primera etapa se seleccionó una unidad primaria de muestreo. Es decir, una zona geográfica. La segunda etapa fue por vivienda y la tercera fue por personas que habitaban en dicha vivienda.    
 
 
 
@@ -89,6 +90,7 @@ library(broom)
 library(scales)
 library(lemon)
 library(ggplot2)
+library(survey)
 knit_print.data.frame <- lemon_print
 
 #Lectura de Datos y Diccionario
@@ -101,16 +103,36 @@ diccionario  <-  read_csv("https://github.com/pablolopez2733/Aplicada1/raw/maste
 
 
 ```
+
 Diccionario:
-```{r caption="Data frame is now printed using `kable`.",render=lemon_print}
-diccionario
+
+```{r}
+knitr::kable(diccionario, format="markdown")
 ```
 
 
-Obtenemos valores unicos:
+
+
+## Limpieza de datos
+
 ```{r,tidy=TRUE, message=FALSE, warning=FALSE}
 
-num.pers  <- df %>% distinct(ID_PER) %>% tally() %>% as.numeric()
+df<-  df %>% mutate(sufrio.delitos = if_else(AP6_2== "1\r", 1, 0, missing = 0))
+df<-  df %>% mutate(robo.coche = if_else(AP6_4_01== "1\r", 1, 0, missing = 0))
+df<-  df %>% mutate(robo.casa = if_else(AP6_4_04== "1\r", 1, 0, missing = 0))
+df<-  df %>% mutate(secuestro = if_else(AP6_9== "1\r", 1, 0, missing = 0))
+df<-  df %>% mutate(desaparicion = if_else(AP6_15_1== "1\r", 1, 0, missing = 0))
+df<-  df %>% mutate(homicidio = if_else(AP6_19== "1\r", 1, 0, missing = 0))
+df<-  df %>% mutate(asalto = if_else(AP7_3_05== "1\r", 1, 0, missing = 0))
+df<-  df %>% mutate(num.asaltos = AP7_4_05)
+df<-  df %>% mutate(Estado = NOM_ENT)
+df<-  df %>% mutate(Estrato = ESTRATO)
+
+
+df <- df %>% select(ID_PER,UPM,SEXO,EDAD,FAC_HOG,sufrio.delitos,robo.coche,robo.casa,secuestro,desaparicion,homicidio,asalto,EST_DIS,num.asaltos,Estado,Estrato)
+df$FAC_HOG <- as.numeric(df$FAC_HOG)
+diseño  <- svydesign(id = ~ID_PER, strata = ~Estrato, weights = ~FAC_HOG,
+                     PSU = ~UPM, data = df, nest = TRUE) 
 
 ```
 
@@ -161,37 +183,151 @@ n.vic<-n*.2533
 
 ```
 
-## Gráficas
-Veamos la distribución de hombres y mujeres dentro de la muestra:
+## Gráficas   
+
+Veamos la distribución de hombres y mujeres que sufrieron algún delito, dentro de la muestra:
 
 ```{r,tidy=TRUE, message=FALSE, warning=FALSE}
 
-num.hombres <- df %>% filter(SEXO == "1\r") %>% tally() %>% as.numeric()
-num.mujeres <- df %>% filter(SEXO == "2\r") %>% tally() %>% as.numeric()
 
-df<- df %>% mutate(Sexo= ifelse(SEXO== "1\r", "HOMBRE", "MUJER"))
 
-hombres.delito <- df %>% filter(Sexo == "HOMBRE" & AP6_2 =="1\r") %>% count()
-mujeres.delito <- df %>% filter(Sexo == "MUJER" & AP6_2 =="1\r") %>% count()
+df<- df %>% mutate(Sexo = ifelse(SEXO== "1\r", "HOMBRE", "MUJER"))
+
+hombres.delito <- df %>% 
+  filter(Sexo == "HOMBRE" & sufrio.delitos == 1) %>%
+  count()
+mujeres.delito <- df %>% 
+  filter(Sexo == "MUJER" & sufrio.delitos == 1) %>% 
+  count()
+
+#Hagamos un df para el barplot
 df_1 <- as.data.frame(rbind(hombres.delito,mujeres.delito))
-
 df_1 <- cbind(df_1,c("Hombres","Mujeres"))
-
 names(df_1)[1] <- "Conteo_de_delitos"
 names(df_1)[2] <- "Sexo"
 
 
-ggplot(df_1,aes(x=Sexo,y=Conteo_de_delitos))+
+ggplot(df_1,aes(x=Sexo,y=Conteo_de_delitos,fill=Sexo))+
   geom_bar (stat="identity", width=0.7)+
-  scale_fill_manual(values=c("#1f50bd","#ce2393"))+
-  theme_minimal()
+  theme_minimal() +
+  labs(
+  title = "Conteo de víctimas de delitos por sexo durante el 2018 ",
+  x = "Sexo",
+  y = "Cantidad de delitos"
+  )
+
+```
+Desafortunadamente, son más mujeres las que son víctimas de delitos. 
+
+* Víctimas de delitos por edad
+```{r}
+delitos.edad <- df %>% 
+  filter(sufrio.delitos == 1) %>%
+  group_by(EDAD) %>% 
+  count()
+
+#Borramos los que no especificaron edad:
+df_bar <- delitos.edad[-c(81), ]
 
 
+p <- ggplot(df_bar)+
+      geom_col(aes(x = EDAD, y = n, fill = EDAD),show.legend = FALSE) +
+      ggtitle("Edades de las víctimas de delito") +
+      labs(
+      x = "Edades",
+      y = "Total de delitos"
+      )+
+      theme(axis.text.x=element_text(angle=45, hjust=1))+
+      scale_x_discrete(breaks=c("18\r","28\r", "38\r","48\r",
+                                "58\r","68\r","78\r","88\r","97\r"),
+        labels=c("18","28", "38","48", "58","68","78","88","97"))
+p + theme_minimal()
 
+#Veamos cuantas personas decidieron no especificar su edad
+no.especificada <- delitos.edad %>% 
+  filter(EDAD == "98\r")
 
+paste0("",no.especificada["n"]," Personas decidieron no especificar su edad.") 
 
 ```
 
+Parece ser que la población que más en riesgo parece estar de ser víctima de algún tipo de delito son los adultos jóvenes de entre 30 y 48 años.  Grafiquemos ahora la densidad de robos por edad.
+
+
+
+* Cantidad de robos a casa por estado.
+```{r tidy=TRUE, message=FALSE, warning=FALSE}
+robos.casa <- df %>% 
+  filter(homicidio == 1) %>%
+  group_by(Estado) %>% 
+  count()
+
+
+p2 <- ggplot(robos.casa)+
+      geom_col(aes(x = Estado, y = n, fill = Estado),show.legend = FALSE) +
+      ggtitle("Cantidad de homicidios por Estado durante 2018.") +
+      theme_minimal()+
+      labs(
+      x = "Estados",
+      y = "Homicidios"
+      )+
+      theme(axis.text.x=element_text(angle=90, hjust=1,vjust = 0))
+p2
+
+```
+Parece ser que el Norte del país es altamente inseguro ya que Estados como Chihuahua, Sinaloa, Tamaulipas y Colima presentan conteos altos de homicidios. Sin embargo es en Guerrero donde más homicidios se registran.
+
+* Homicidios vs Asaltos
+A continuación presentaremos una visualización muy útil para evaluar riesgo de asalto y homicidio. 
+
+```{r tidy=TRUE, message=FALSE, warning=FALSE}
+homicidios.estado <- df %>% 
+  filter(homicidio == 1) %>%
+  group_by(Estado) %>% 
+  count()
+
+asaltos.estado <- df %>% 
+  filter(asalto == 1) %>%
+  group_by(Estado) %>% 
+  count()
+
+names(asaltos.estado)[2] <- "Asaltos"
+names(homicidios.estado)[2] <- "Homicidios"
+
+df_scat <- merge(asaltos.estado, homicidios.estado,
+                 by = "Estado", incomparables = NA)
+
+#graficamos
+scat <- ggplot(df_scat, aes(x=Asaltos, y=Homicidios)) + 
+  geom_point(aes(color=Estado), size=3.5,show.legend = FALSE)+
+  geom_text(label=df_scat$Estado,vjust=1.5,hjust=.5,colour="black",size=3)+
+  ggtitle("Cantidad de homicidios y asaltos por estado")+
+  xlim(25, 400)+
+  labs(
+    caption = "Se quitó la ciudad de México por ser un outlier en 'Asaltos'",
+    x = "Asaltos",
+    y = "Homicidios"
+  )+
+  geom_hline(yintercept = mean(df_scat$Homicidios),color = "red",
+             linetype = "dashed", alpha=0.5)+
+  geom_vline(xintercept = mean(df_scat$Asaltos),color = "red",
+             linetype = "dashed", alpha=0.5)
+
+scat+theme_bw()
+
+```
+Esta visualización es explicativa porque divide el plano en 4 secciones. La primera sería la esquina inferior izquierda. Podríamos llamarle la "zona segura". Todos los estados en esta zona tienen asaltos y homicidios por debajo del promedio del país. Vemos entonces que bajo este criterio, Aguascalientes, Zacatecas y Nayarit parecen ser los estados menos problemáticos. El recuadro superior izquierdo es zona de riesgo por homicidio (ya que su número de homicidios está por arriba del promedio) pero no por asalto.  La esquina inferior derecha son zonas con alto riesgo de asalto pero poco número de homicidios. La zona superior derecha la denominaría la "zona de alto riesgo". En esta los homicidios y asaltos ambos están por arriba del promedio. Puebla y Morelos parecen ser los únicos dos estados en esta zona. 
+
+
+## Estimadores
+
+* Media   
+Interesa estimar la cantidad total de vehículos robados durante 2018.
+```{r}
+total.robosv.2018 <- svytotal(~robo.coche, diseño)
+total.robosv.2018
+
+```
 
 
 ## Referencias:   

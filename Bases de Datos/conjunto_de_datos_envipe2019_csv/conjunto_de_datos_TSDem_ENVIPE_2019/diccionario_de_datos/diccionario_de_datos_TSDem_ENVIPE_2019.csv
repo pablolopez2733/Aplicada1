@@ -1,98 +1,0 @@
-NOMBRE_CAMPO,NEMÓNICO,TIPO,LONGITUD,RANGO_CLAVES
-Identificador de vivienda seleccionada,ID_VIV,Alfanumérico,10,"0100001.01…3299999.99"
-Identificador del hogar seleccionado,ID_HOG,Alfanumérico,13,"0100001.01.01…3299999.99.99"
-Identificador persona,ID_PER,Alfanumérico,16,"0100001.01.01.01…3299999.99.99.30"
-Control de vivienda (UPM),UPM,Numérico,7,"0100001…3299999"
-Vivienda seleccionada,VIV_SEL,Numérico,2,"01…99"
-Control del hogar,HOGAR,Numérico,2,"01…06"
-Resultado de la visita al hogar,RESUL_H,Alfanumérico,1,"A"
-Resultado de la visita al hogar,RESUL_H,Alfanumérico,1,"B"
-Número de renglón del informante,N_REN,Numérico,2,"01…30"
-Parentesco con el Jefe del Hogar,PAREN,Numérico,1,"1"
-Parentesco con el Jefe del Hogar,PAREN,Numérico,1,"2"
-Parentesco con el Jefe del Hogar,PAREN,Numérico,1,"3"
-Parentesco con el Jefe del Hogar,PAREN,Numérico,1,"4"
-Parentesco con el Jefe del Hogar,PAREN,Numérico,1,"5"
-Parentesco con el Jefe del Hogar,PAREN,Numérico,1,"6"
-Sexo,SEXO,Numérico,1,"1"
-Sexo,SEXO,Numérico,1,"2"
-Edad,EDAD,Numérico,2,"00"
-Edad,EDAD,Numérico,2,"00…96"
-Edad,EDAD,Numérico,2,"97"
-Edad,EDAD,Numérico,2,"98"
-Edad,EDAD,Numérico,2,"99"
-Código de selección,CODIGO,Numérico,1,"1"
-Código de selección,CODIGO,Numérico,1,"2"
-Nivel de instrucción,NIV,Numérico,2,"00"
-Nivel de instrucción,NIV,Numérico,2,"01"
-Nivel de instrucción,NIV,Numérico,2,"02"
-Nivel de instrucción,NIV,Numérico,2,"03"
-Nivel de instrucción,NIV,Numérico,2,"04"
-Nivel de instrucción,NIV,Numérico,2,"05"
-Nivel de instrucción,NIV,Numérico,2,"06"
-Nivel de instrucción,NIV,Numérico,2,"07"
-Nivel de instrucción,NIV,Numérico,2,"08"
-Nivel de instrucción,NIV,Numérico,2,"09"
-Nivel de instrucción,NIV,Numérico,2,"99"
-Grados de estudio,GRA,Numérico,1,"0…8"
-Grados de estudio,GRA,Numérico,1,"9"
-Clave Entidad,CVE_ENT,Numérico,2,"01"
-Clave Entidad,CVE_ENT,Numérico,2,"02"
-Clave Entidad,CVE_ENT,Numérico,2,"03"
-Clave Entidad,CVE_ENT,Numérico,2,"04"
-Clave Entidad,CVE_ENT,Numérico,2,"05"
-Clave Entidad,CVE_ENT,Numérico,2,"06"
-Clave Entidad,CVE_ENT,Numérico,2,"07"
-Clave Entidad,CVE_ENT,Numérico,2,"08"
-Clave Entidad,CVE_ENT,Numérico,2,"09"
-Clave Entidad,CVE_ENT,Numérico,2,"10"
-Clave Entidad,CVE_ENT,Numérico,2,"11"
-Clave Entidad,CVE_ENT,Numérico,2,"12"
-Clave Entidad,CVE_ENT,Numérico,2,"13"
-Clave Entidad,CVE_ENT,Numérico,2,"14"
-Clave Entidad,CVE_ENT,Numérico,2,"15"
-Clave Entidad,CVE_ENT,Numérico,2,"16"
-Clave Entidad,CVE_ENT,Numérico,2,"17"
-Clave Entidad,CVE_ENT,Numérico,2,"18"
-Clave Entidad,CVE_ENT,Numérico,2,"19"
-Clave Entidad,CVE_ENT,Numérico,2,"20"
-Clave Entidad,CVE_ENT,Numérico,2,"21"
-Clave Entidad,CVE_ENT,Numérico,2,"22"
-Clave Entidad,CVE_ENT,Numérico,2,"23"
-Clave Entidad,CVE_ENT,Numérico,2,"24"
-Clave Entidad,CVE_ENT,Numérico,2,"25"
-Clave Entidad,CVE_ENT,Numérico,2,"26"
-Clave Entidad,CVE_ENT,Numérico,2,"27"
-Clave Entidad,CVE_ENT,Numérico,2,"28"
-Clave Entidad,CVE_ENT,Numérico,2,"29"
-Clave Entidad,CVE_ENT,Numérico,2,"30"
-Clave Entidad,CVE_ENT,Numérico,2,"31"
-Clave Entidad,CVE_ENT,Numérico,2,"32"
-Nombre de la Entidad,NOM_ENT,Alfanumérico,250,"Texto mínimo 2 caracteres"
-Municipio,CVE_MUN,Numérico,3,"001...570"
-Nombre del municipio,NOM_MUN,Alfanumérico,250,"Texto mínimo 2 caracteres"
-Condición de actividad,AP3_8,Numérico,1,"1"
-Condición de actividad,AP3_8,Numérico,1,"2"
-Condición de actividad,AP3_8,Numérico,1,"3"
-Condición de actividad,AP3_8,Numérico,1,"4"
-Condición de actividad,AP3_8,Numérico,1,"5"
-Condición de actividad,AP3_8,Numérico,1,"6"
-Condición de actividad,AP3_8,Numérico,1,"7"
-Condición de actividad,AP3_8,Numérico,1,"8"
-Condición de actividad,AP3_8,Numérico,1,"9"
-Verificación de actividad,AP3_9,Numérico,1,"1"
-Verificación de actividad,AP3_9,Numérico,1,"2"
-Verificación de actividad,AP3_9,Numérico,1,"3"
-Verificación de actividad,AP3_9,Numérico,1,"4"
-Posición en la ocupación,AP3_10,Numérico,1,"1"
-Posición en la ocupación,AP3_10,Numérico,1,"2"
-Posición en la ocupación,AP3_10,Numérico,1,"3"
-Posición en la ocupación,AP3_10,Numérico,1,"4"
-Posición en la ocupación,AP3_10,Numérico,1,"5"
-Factor hogar,FAC_HOG,Numérico,6,"000001 … 999999"
-Factor hogar del área metropolitana,FAC_HOG_AM,Numérico,6,"000001 … 999999"
-Dominio,DOMINIO,Alfanumérico,1,"U"
-Dominio,DOMINIO,Alfanumérico,1,"C"
-Dominio,DOMINIO,Alfanumérico,1,"R"
-Estrato de diseño muestral,EST_DIS,Numérico,3,"001 … 303"
-Unidad primaria de muestreo,UPM_DIS,Numérico,5,"00001 … 99999"

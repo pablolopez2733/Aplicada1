@@ -1,55 +1,0 @@
-NOMBRE_CAMPO,NEMÓNICO,TIPO,LONGITUD,RANGO_CLAVES
-Identificador de vivienda seleccionada,ID_VIV,Alfanumérico,10,"0100001.01…3299999.99"
-Identificador del hogar seleccionado,ID_HOG,Alfanumérico,13,"0100001.01.01…3299999.99.99"
-Control de vivienda (UPM),UPM,Numérico,7,"0100001…3299999"
-Vivienda seleccionada,VIV_SEL,Numérico,2,"01…99"
-Control del hogar,HOGAR,Numérico,2,"01…06"
-Resultado de la visita al hogar,RESUL_H,Alfanumérico,1,"A"
-Resultado de la visita al hogar,RESUL_H,Alfanumérico,1,"B"
-Resultado de la visita al hogar,RESUL_H,Alfanumérico,1,"C"
-Resultado de la visita al hogar,RESUL_H,Alfanumérico,1,"D"
-Número de renglón del (la) informante,N_INF,Numérico,2,"01…30"
-Número de renglón de la persona seleccionada,R_SEL,Numérico,2,"01…30"
-Clave Entidad,CVE_ENT,Numérico,2,"01"
-Clave Entidad,CVE_ENT,Numérico,2,"02"
-Clave Entidad,CVE_ENT,Numérico,2,"03"
-Clave Entidad,CVE_ENT,Numérico,2,"04"
-Clave Entidad,CVE_ENT,Numérico,2,"05"
-Clave Entidad,CVE_ENT,Numérico,2,"06"
-Clave Entidad,CVE_ENT,Numérico,2,"07"
-Clave Entidad,CVE_ENT,Numérico,2,"08"
-Clave Entidad,CVE_ENT,Numérico,2,"09"
-Clave Entidad,CVE_ENT,Numérico,2,"10"
-Clave Entidad,CVE_ENT,Numérico,2,"11"
-Clave Entidad,CVE_ENT,Numérico,2,"12"
-Clave Entidad,CVE_ENT,Numérico,2,"13"
-Clave Entidad,CVE_ENT,Numérico,2,"14"
-Clave Entidad,CVE_ENT,Numérico,2,"15"
-Clave Entidad,CVE_ENT,Numérico,2,"16"
-Clave Entidad,CVE_ENT,Numérico,2,"17"
-Clave Entidad,CVE_ENT,Numérico,2,"18"
-Clave Entidad,CVE_ENT,Numérico,2,"19"
-Clave Entidad,CVE_ENT,Numérico,2,"20"
-Clave Entidad,CVE_ENT,Numérico,2,"21"
-Clave Entidad,CVE_ENT,Numérico,2,"22"
-Clave Entidad,CVE_ENT,Numérico,2,"23"
-Clave Entidad,CVE_ENT,Numérico,2,"24"
-Clave Entidad,CVE_ENT,Numérico,2,"25"
-Clave Entidad,CVE_ENT,Numérico,2,"26"
-Clave Entidad,CVE_ENT,Numérico,2,"27"
-Clave Entidad,CVE_ENT,Numérico,2,"28"
-Clave Entidad,CVE_ENT,Numérico,2,"29"
-Clave Entidad,CVE_ENT,Numérico,2,"30"
-Clave Entidad,CVE_ENT,Numérico,2,"31"
-Clave Entidad,CVE_ENT,Numérico,2,"32"
-Nombre de la Entidad,NOM_ENT,Alfanumérico,250,"Texto mínimo 2 caracteres"
-Municipio,CVE_MUN,Numérico,3,"001...570"
-Nombre del municipio,NOM_MUN,Alfanumérico,250,"Texto mínimo 2 caracteres"
-Total de personas en el hogar,TOT_PER,Numérico,2,"01…30"
-Factor hogar,FAC_HOG,Numérico,6,"000001 … 999999"
-Factor hogar del área metropolitana,FAC_HOG_AM,Numérico,6,"000001 … 999999"
-Dominio u ámbito,DOMINIO,Alfanumérico,1,"U"
-Dominio u ámbito,DOMINIO,Alfanumérico,1,"C"
-Dominio u ámbito,DOMINIO,Alfanumérico,1,"R"
-Estrato muestral,EST_DIS,Numérico,3,"001 … 303"
-Unidad primaria de muestreo,UPM_DIS,Numérico,5,"00001 … 99999"

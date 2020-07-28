@@ -94,8 +94,14 @@ library(survey)
 knit_print.data.frame <- lemon_print
 
 #Lectura de Datos y Diccionario
+options(stringsAsFactors=FALSE,strip.white = TRUE)
 
-df <-  read_csv("https://raw.githubusercontent.com/pablolopez2733/Aplicada1/master/Bases%20de%20Datos/conjunto_de_datos_envipe2019_csv/conjunto_de_datos_TPer_Vic2_ENVIPE_2019/conjunto_de_datos/conjunto_de_datos_TPer_Vic2_ENVIPE_2019.csv")
+
+# df <-  read_csv("https://raw.githubusercontent.com/pablolopez2733/Aplicada1/master/Bases%20de%20Datos/conjunto_de_datos_envipe2019_csv/conjunto_de_datos_TPer_Vic2_ENVIPE_2019/conjunto_de_datos/conjunto_de_datos_TPer_Vic2_ENVIPE_2019.csv")
+
+df <- read_csv("C:/Users/pablo/Desktop/GithubRepos/Aplicada1/Bases de Datos/conjunto_de_datos_envipe2019_csv/conjunto_de_datos_TPer_Vic2_ENVIPE_2019/conjunto_de_datos/conjunto_de_datos_TPer_Vic2_ENVIPE_2019.csv")
+
+TMod_Vic <- read_csv("https://raw.githubusercontent.com/pablolopez2733/Aplicada1/master/Bases%20de%20Datos/conjunto_de_datos_envipe2019_csv/conjunto_de_datos_TMod_Vic_ENVIPE_2019/conjunto_de_datos/conjunto_de_datos_TMod_Vic_ENVIPE_2019.csv")
 
 
 diccionario  <-  read_csv("https://github.com/pablolopez2733/Aplicada1/raw/master/Bases%20de%20Datos/conjunto_de_datos_envipe2019_csv/conjunto_de_datos_TPer_Vic2_ENVIPE_2019/diccionario_de_datos/diccionario_de_datos_TPer_Vic2_ENVIPE_2019.csv", 
@@ -104,9 +110,12 @@ diccionario  <-  read_csv("https://github.com/pablolopez2733/Aplicada1/raw/maste
 
 ```
 
+
+
+
 Diccionario:
 
-```{r}
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
 knitr::kable(diccionario, format="markdown")
 ```
 
@@ -115,21 +124,49 @@ knitr::kable(diccionario, format="markdown")
 
 ## Limpieza de datos
 
+La base de datos es un tanto defectuosa ya que las variables discretas no son números. sino caracteres seguidos de \ r por lo tanto, todas las variables numéricas que usemos hay que limpiarlas. Utilizamos el siguiente código:
+
+**Nota:** El siguiente bloque de código fue obtenido como respuesta a una pregunta que posteamos en Stack Exchange, no es nuestro. Lo que hace es eliminar los carriage returns del dataframe y luego las variables ya sin
+la "r" las cambia a tipo numérica: 
+
+```{r ,tidy=TRUE, message=FALSE, warning=FALSE}
+df %>% mutate_all(.funs = ~str_replace_all(.,"[\r]",""))
+TMod_Vic  %>% mutate_all(.funs = ~str_replace_all(.,"[\r]",""))
+
+#Use mutate at to pass a vector of variables to convert to numeric
+
+df <- df %>%
+    mutate_at(c("EDAD","SEXO", "AP6_2","AP6_4_01","AP6_4_04","AP6_9","AP6_15_1",
+                "AP6_19","AP7_3_05","AP7_4_05"),
+              .funs = ~parse_number(.))
+
+TMod_Vic <- TMod_Vic %>%
+    mutate_at(c("EDAD","SEXO", "ID_HOG","FAC_DEL","BP1_20","BP1_4","BPCOD"),
+              .funs = ~parse_number(.))
+
+```
+
+Ahora sí limpiamos un poco el dataframe con nombres más amigables:
+
 ```{r,tidy=TRUE, message=FALSE, warning=FALSE}
 
-df<-  df %>% mutate(sufrio.delitos = if_else(AP6_2== "1\r", 1, 0, missing = 0))
-df<-  df %>% mutate(robo.coche = if_else(AP6_4_01== "1\r", 1, 0, missing = 0))
-df<-  df %>% mutate(robo.casa = if_else(AP6_4_04== "1\r", 1, 0, missing = 0))
-df<-  df %>% mutate(secuestro = if_else(AP6_9== "1\r", 1, 0, missing = 0))
-df<-  df %>% mutate(desaparicion = if_else(AP6_15_1== "1\r", 1, 0, missing = 0))
-df<-  df %>% mutate(homicidio = if_else(AP6_19== "1\r", 1, 0, missing = 0))
-df<-  df %>% mutate(asalto = if_else(AP7_3_05== "1\r", 1, 0, missing = 0))
+
+df<-  df %>% mutate(sufrio.delitos = if_else(AP6_2== 1, 1, 0, missing = 0))
+df<-  df %>% mutate(robo.coche = if_else(AP6_4_01== 1, 1, 0, missing = 0))
+df<-  df %>% mutate(robo.casa = if_else(AP6_4_04== 1, 1, 0, missing = 0))
+df<-  df %>% mutate(secuestro = if_else(AP6_9== 1, 1, 0, missing = 0))
+df<-  df %>% mutate(desaparicion = if_else(AP6_15_1== 1, 1, 0, missing = 0))
+df<-  df %>% mutate(homicidio = if_else(AP6_19== 1, 1, 0, missing = 0))
+df<-  df %>% mutate(asalto = if_else(AP7_3_05== 1, 1, 0, missing = 0))
 df<-  df %>% mutate(num.asaltos = AP7_4_05)
 df<-  df %>% mutate(Estado = NOM_ENT)
 df<-  df %>% mutate(Estrato = ESTRATO)
 
 
-df <- df %>% select(ID_PER,UPM,SEXO,EDAD,FAC_HOG,sufrio.delitos,robo.coche,robo.casa,secuestro,desaparicion,homicidio,asalto,EST_DIS,num.asaltos,Estado,Estrato)
+df <- df %>% select(ID_PER,UPM,SEXO,EDAD,FAC_HOG,sufrio.delitos,robo.coche,
+                    robo.casa,secuestro,desaparicion,homicidio,asalto,
+                    EST_DIS,num.asaltos,Estado,Estrato)
+
 df$FAC_HOG <- as.numeric(df$FAC_HOG)
 diseño  <- svydesign(id = ~ID_PER, strata = ~Estrato, weights = ~FAC_HOG,
                      PSU = ~UPM, data = df, nest = TRUE) 
@@ -175,23 +212,27 @@ A<- z^2 * q* DEFF
 B<- e^2*p*(1-t)
 n<- A/B
 
-#Sin embargo, solamente tenemos que considerar el 
-#25.33% de los cuestionarios contestados de forma correcta
-#con victimización como parte de nuestra muestra
+paste0("n= ",n)
 
-n.vic<-n*.2533
 
 ```
+Vemos que la $n$ que obtuvimos es consistente con la encuesta ya que se encuestaron 102,043 viviendas. 
+
+Explicar como calcula el DEFF
+
+
 
 ## Gráficas   
 
-Veamos la distribución de hombres y mujeres que sufrieron algún delito, dentro de la muestra:
+Para darnos una idea general de los datos en la muestra, realizamos algunas visualizaciones. 
+
+### Cantidad de hombres y mujeres que sufrieron algún delito
 
 ```{r,tidy=TRUE, message=FALSE, warning=FALSE}
 
 
 
-df<- df %>% mutate(Sexo = ifelse(SEXO== "1\r", "HOMBRE", "MUJER"))
+df<- df %>% mutate(Sexo = ifelse(SEXO== 1, "HOMBRE", "MUJER"))
 
 hombres.delito <- df %>% 
   filter(Sexo == "HOMBRE" & sufrio.delitos == 1) %>%
@@ -219,7 +260,9 @@ ggplot(df_1,aes(x=Sexo,y=Conteo_de_delitos,fill=Sexo))+
 ```
 Desafortunadamente, son más mujeres las que son víctimas de delitos. 
 
-* Víctimas de delitos por edad
+
+
+### Víctimas de delitos por edad
 ```{r}
 delitos.edad <- df %>% 
   filter(sufrio.delitos == 1) %>%
@@ -236,26 +279,21 @@ p <- ggplot(df_bar)+
       labs(
       x = "Edades",
       y = "Total de delitos"
-      )+
-      theme(axis.text.x=element_text(angle=45, hjust=1))+
-      scale_x_discrete(breaks=c("18\r","28\r", "38\r","48\r",
-                                "58\r","68\r","78\r","88\r","97\r"),
-        labels=c("18","28", "38","48", "58","68","78","88","97"))
+      )
 p + theme_minimal()
 
 #Veamos cuantas personas decidieron no especificar su edad
 no.especificada <- delitos.edad %>% 
-  filter(EDAD == "98\r")
+  filter(EDAD == 98)
 
 paste0("",no.especificada["n"]," Personas decidieron no especificar su edad.") 
 
 ```
 
-Parece ser que la población que más en riesgo parece estar de ser víctima de algún tipo de delito son los adultos jóvenes de entre 30 y 48 años.  Grafiquemos ahora la densidad de robos por edad.
+Parece ser que los que más riesgo corren de ser víctima de algún delito son los adultos jóvenes de entre 30 y 48 años. 
 
 
-
-* Cantidad de robos a casa por estado.
+### Cantidad de robos a casa por estado.
 ```{r tidy=TRUE, message=FALSE, warning=FALSE}
 robos.casa <- df %>% 
   filter(homicidio == 1) %>%
@@ -277,7 +315,7 @@ p2
 ```
 Parece ser que el Norte del país es altamente inseguro ya que Estados como Chihuahua, Sinaloa, Tamaulipas y Colima presentan conteos altos de homicidios. Sin embargo es en Guerrero donde más homicidios se registran.
 
-* Homicidios vs Asaltos
+### Homicidios vs Asaltos
 A continuación presentaremos una visualización muy útil para evaluar riesgo de asalto y homicidio. 
 
 ```{r tidy=TRUE, message=FALSE, warning=FALSE}
@@ -318,20 +356,165 @@ scat+theme_bw()
 ```
 Esta visualización es explicativa porque divide el plano en 4 secciones. La primera sería la esquina inferior izquierda. Podríamos llamarle la "zona segura". Todos los estados en esta zona tienen asaltos y homicidios por debajo del promedio del país. Vemos entonces que bajo este criterio, Aguascalientes, Zacatecas y Nayarit parecen ser los estados menos problemáticos. El recuadro superior izquierdo es zona de riesgo por homicidio (ya que su número de homicidios está por arriba del promedio) pero no por asalto.  La esquina inferior derecha son zonas con alto riesgo de asalto pero poco número de homicidios. La zona superior derecha la denominaría la "zona de alto riesgo". En esta los homicidios y asaltos ambos están por arriba del promedio. Puebla y Morelos parecen ser los únicos dos estados en esta zona. 
 
+### Mapa de calor 
+
+```{r tidy=TRUE, message=FALSE, warning=FALSE}
+#CÓDIGO DE LA GRAFICA 1:
+tabla_grafica1 <- data.frame(Tipo_Delito = TMod_Vic$BPCOD,
+                             Hora = TMod_Vic$BP1_4)
+
+#Función que cuenta el número de entradas en la tabla_grafica1 que tienen al
+#número "a" en la columna de Tipo Delito y al número "b" en la columna Hora
+contador <- function(a,b){
+  n    <- length(tabla_grafica1$Tipo_Delito)
+  resp <- 0
+  for (i in 1:n) {
+    if(tabla_grafica1$Tipo_Delito[i] == a  & tabla_grafica1$Hora[i] == b){
+      resp <- resp + 1
+    }
+  }
+  return(resp)
+}
+
+#Creamos una matriz en la entrada i,j que contenga el número de delitos de la
+#categoría i que sucedieron en el intervalo de tiempo j.
+matriz_test <- matrix(nrow = 15,
+                      ncol = 4, dimnames = list(c("Robo total de vehículo",
+                                                  "Robo parcial de vehiculo",
+                                                  "Vandalismo",
+                                                  "Traspaso de propiedad",
+                                                  "Robo o asalto en calle",
+                                                  "Robo en forma distinta a la anteior",
+                                                  "Fraude bancario",
+                                                  "Fraude al consumidor",
+                                                  "Extorsión",
+                                                  "Amenaza",
+                                                  "Lesión Física",
+                                                  "Secuestro",
+                                                  "Hostigamiento sexual",
+                                                  "Violación",
+                                                  "Otros delitos"),
+                                                c("Mañana","Tarde","Noche","Madrugada")))
+
+#Llenado de la matriz
+for (i in 1:15) {
+  for (j in 1:4) {
+    matriz_test[i,j] <- contador(i,j)
+  }
+}
+
+#Para crear el mapa de calor
+heatmap(matriz_test)
+```
+
+Vemos que en la madrugada hay alto riesgo de que se traspase la propiedad, se realicen actos de vandalismo y/o te roben tu vehículo. 
+
+
 
 ## Estimadores
 
-* Media   
-Interesa estimar la cantidad total de vehículos robados durante 2018.
-```{r}
-total.robosv.2018 <- svytotal(~robo.coche, diseño)
-total.robosv.2018
+
+
+### ESTIMACIÓN DE LA PROPORCIÓN DE DELITOS QUE SON DENUNCIADOS AL MINISTERIO PÚBLICO
+
+En nuestra base de datos la variable BP1_20 indica si se hizo una denuncia en el 
+Ministerio Público . El valor 1 significa que el delito fue denunciado mientras 
+que 2 significa que no fue denunciado. Crearemos una varible nueva llamada  
+Denuncia_MP que sea la indicadora respecto a los delitos, es decir, que valga 
+1 si el delito fue denunciado, y que valga 0 si no.
+
+
+```{r tidy=TRUE, message=FALSE, warning=FALSE}
+#Dado que ID_HOG puede repetirse varias veces en virtud de que puede ocurrir más
+#de un delito en un hogar, necesitamos identificar de manera única a cada una de las
+#entradas de la base de datos a través de un id que se crea a continuación:
+
+TMod_Vic <- TMod_Vic %>% mutate( indice = seq(1:length(TMod_Vic$ID_HOG)))
+TMod_Vic <- TMod_Vic %>% mutate( id = paste0(ID_HOG, "_", indice))
+
+TMod_Vic <- TMod_Vic %>% mutate( Denuncia_MP = ifelse(BP1_20 == 1,1,0))
+
+#Una vez que ya fue modificada la base de datos invocamos a la función svydesign
+#y especificamos los aspectos de nuestro diseño muestral
+diseno   <- svydesign(id = ~id,
+                      strata = ~EST_DIS,
+                      weights = ~FAC_DEL,
+                      PSU = UPM_DIS,
+                      data = TMod_Vic, nest = TRUE)
+
+
+```
+
+Ahora obtenemos la estimación puntual de la proporción de delitos que son denunciados
+al Ministerio Público:
+
+```{r tidy=TRUE, message=FALSE, warning=FALSE}
+p_gorro  <- svymean(~Denuncia_MP, diseno)
+
+#Su intervalo de confianza a nivel 95% está dado por:
+paste0("El estimador de la proporción es ",p_gorro)
+print("Con intervalo de confianza: ")
+print(confint(p_gorro))
+
+
+```
+
+### ESTIMACIÓN DE LA MEDIA Y VARIANZA DEL MOMENTO DEL DÍA EN QUE FUE COMETIDO EL DELITO
+
+Saber la distribución de la ocurrencia de los delitos a lo largo del día es,
+sin lugar a dudas, información crucial para todo aquél que pretenda implementar 
+medidas de seguridad de manera eficiente. En  nuestra base de datos, la variable 
+BP1_4 indica el momento del día en que ocurrió el delito. Esta variable puede 
+toma valores de la siguiente forma: 
+
+*Toma el valor de 1 si el delito ocurrió entre las 6:01 y 12:00hrs
+*Toma el valor de 2 si el delito ocurrió entre las 2:01 y 18:00hrs
+*Toma el valor de 3 si el delito ocurrió entre las 18:01 y 24:00hrs
+*Toma el valor de 4 si el delito ocurrió entre las 00:01 y 6:00 hrs
+*Toma el valor de 9 si la hora no fue especificada   
+
+
+
+Para poder hacer una análisis de la media y la varianza de esta variable debemos, 
+para no perder precisión, omitir el conteo de aquellos datos en donde la hora 
+no fue especificada.
+ 
+```{r tidy=TRUE, message=FALSE, warning=FALSE}
+TMod_Vic       <- TMod_Vic %>% filter(BP1_4 != 9)
+
+#Redefinimos el diseño en virtud de que la base de datos ha sido modificada.
+diseno         <- svydesign(id = ~id,
+                      strata = ~EST_DIS,
+                      weights = ~FAC_DEL,
+                      PSU = UPM_DIS,
+                      data = TMod_Vic, nest = TRUE)
+
+
+```
+
+Ahora podemos estimar la media y varianza  poblacional de esta variable:
+
+```{r tidy=TRUE, message=FALSE, warning=FALSE}
+#
+mu_gorro       <- svymean(~BP1_4, diseno)
+var_gorro      <- svyvar(~BP1_4, diseno)    
+
+#Y sus respectivos intervalos de confianza están dados por:
+ic_mu <- confint(mu_gorro)
+ic_var <- confint(var_gorro)
+print("Intervalo de confianza del estimador de Mu gorro:")
+print(ic_mu)
+print("Intervalo de confianza para el estimador de la varianza:")
+print(var_gorro)
 
 ```
 
 
-## Referencias:   
 
+
+
+
+## Referencias:   
 
 * Salazar, C. F. S. (2019). ENVIPE. Consultado el 23 de julio de 2020, en http://bdsocial.inmujeres.gob.mx/index.php/envipe-290   
 * I. (24 de septiembre de 2019). INEGI. Consultado el 23 de julio de 2020, en https://www.inegi.org.mx/app/biblioteca/ficha.html?upc=702825191184

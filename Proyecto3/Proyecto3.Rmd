@@ -137,7 +137,7 @@ TMod_Vic  %>% mutate_all(.funs = ~str_replace_all(.,"[\r]",""))
 
 df <- df %>%
     mutate_at(c("EDAD","SEXO", "AP6_2","AP6_4_01","AP6_4_04","AP6_9","AP6_15_1",
-                "AP6_19","AP7_3_05","AP7_4_05"),
+                "AP6_19","AP7_3_05","AP7_4_05","CVE_ENT"),
               .funs = ~parse_number(.))
 
 TMod_Vic <- TMod_Vic %>%
@@ -218,6 +218,31 @@ paste0("n= ",n)
 ```
 Vemos que la $n$ que obtuvimos es consistente con la encuesta ya que se encuestaron 102,043 viviendas. 
 
+Ahora validémosla también mediante el método visto en clase:
+Recordemos que podemos estimar la $n$ mediante:
+
+$$n =  \left \lceil{\frac{m}{1+\frac{m-1}{N}}}\right \rceil $$
+Donde:
+* $m = \frac{1}{4} Z_{\alpha / 2}^{2}$   
+* Según Eurostat, la población total de México ($N$) es de 126,200,000
+* Utilizaremos $\epsilon = .05$
+* consistentes con lo sugerido por el INEGI, utilizaremos $\alpha = .1$
+
+ Por lo tanto:
+ 
+```{r,tidy=TRUE,message=FALSE,warning=FALSE}
+
+
+n <- ceiling((qnorm(0.95)*sqrt(10000)*126200000)^2/(100^2 + (qnorm(0.95)^2*10000*126200000)))
+
+
+print(paste0("El tamaño de muestra es ", n))
+
+
+```
+ 
+
+
 Explicar como calcula el DEFF
 
 
@@ -263,7 +288,7 @@ Desafortunadamente, son más mujeres las que son víctimas de delitos.
 
 
 ### Víctimas de delitos por edad
-```{r}
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
 delitos.edad <- df %>% 
   filter(sufrio.delitos == 1) %>%
   group_by(EDAD) %>% 
@@ -407,7 +432,7 @@ for (i in 1:15) {
 heatmap(matriz_test)
 ```
 
-Vemos que en la madrugada hay alto riesgo de que se traspase la propiedad, se realicen actos de vandalismo y/o te roben tu vehículo. 
+Este esquema visual facilita la detección de patrones respecto al tiempo para cada uno de los delitos categorizados en la base de datos. Como primera observación, se puede notar que los delitos de Robo Parcial de Vehículo, Vandalismo y Traspaso de Propiedad son mucho más frecuentes en altas horas de la noche, mientras que en la mañana riesgo de ser víctima de alguno de estos delitos se reduce drásticamente. Otro delito que presenta mayor frecuencia en la noche y que merece especial mención es el delito de violación. Por otro lado, los delitos de la mitad superior del mapa de calor presentan una mayor frecuencia en la tarde, especialemtne los delitos de Fraude Bancario, Fraude al Consumidor, Amenaza y Hostigamiento Sexual.
 
 
 
@@ -459,6 +484,9 @@ print(confint(p_gorro))
 
 ```
 
+El objetivo de este estudio fue medir el nivel de confianza que tienen los ciudadanos en los organismos de carácter público encargados de la impartición de justicia, en este caso el Ministerio Público, con el fin de concientizar a la autoridad e incentivar cambios estructurales que faciliten los procesos de denuncia. Habiendo dicho esto, y basándonos en la estimación obtenida, queda claro que la confianza de los ciudadanos en la capacidad del MP para atender y resolver sus demandas es extremadamente baja. Para las autoridades competentes esto es una llamada de atención y, como mínimo, se esperaría que este tema se erija como asunto crucial en su agenda política.
+
+
 ### ESTIMACIÓN DE LA MEDIA Y VARIANZA DEL MOMENTO DEL DÍA EN QUE FUE COMETIDO EL DELITO
 
 Saber la distribución de la ocurrencia de los delitos a lo largo del día es,
@@ -509,9 +537,305 @@ print(var_gorro)
 
 ```
 
+Previo a realizar la estimación de la media y la varianza, una conjetura era que quizá la probabilidad de ser víctima de un delito aumentaba conforme avanzaba el día y llegaba a su pico ya entrada la noche. Sin embargo, los resultados cuentan otra historia, puesto que la estimación de la media y la varianza reflejan un escenario en donde la distribición de los delitos a lo largo del día es bastante uniforme. De ser cierta la conjetura previamente mencionada, uno esperaria ver en los resultados una estimación de la media mucho más inclinada hacia el 4, en lugar de estar prácticamente centrada.   
+
+## Estimacion del total de delitos
+Elección de CDMX y calibramos por municipio:
+
+Al sufrir la base de datos anterior muchas modificaciones, fue necesario leerla de nuevo y limpirla. 
+
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
+#limpiar datos de nuez
+
+
+tpv2 <- read_csv("C:/Users/pablo/Desktop/GithubRepos/Aplicada1/Bases de Datos/conjunto_de_datos_envipe2019_csv/conjunto_de_datos_TPer_Vic2_ENVIPE_2019/conjunto_de_datos/conjunto_de_datos_TPer_Vic2_ENVIPE_2019.csv")
+tpv2 %>% mutate_all(.funs = ~str_replace_all(.,"[\r]",""))
+
+tpv2 <- tpv2 %>%
+  mutate_at(c("EDAD","SEXO", "AP6_2","AP6_4_01","AP6_4_04","AP6_9","AP6_15_1",
+              "AP6_19","AP7_3_05","AP7_4_05","CVE_ENT","FAC_ELE","UPM_DIS",
+              "EST_DIS"),
+            .funs = ~parse_number(.))
+
+tpv2<-tpv2[ tpv2$CVE_ENT %in% c(9),]   #Elección de Ciudad de Mexico
+tpv2$ENT <- (tpv2$NOM_MUN) #Calibramos por Municipio
 
 
 
+tpv2<-  tpv2 %>% mutate(sufrio.delitos = if_else(AP6_2== 1, 1, 0, missing = 0))
+tpv2<-  tpv2 %>% mutate(robo.coche = if_else(AP6_4_01== 1, 1, 0, missing = 0))
+tpv2<-  tpv2 %>% mutate(robo.casa = if_else(AP6_4_04== 1 , 1, 0, missing = 0))
+tpv2<-  tpv2 %>% mutate(secuestro = if_else(AP6_9== 1, 1, 0, missing = 0))
+tpv2<-  tpv2 %>% mutate(desaparicion = if_else(AP6_15_1== 1, 1, 0, missing = 0))
+tpv2<-  tpv2 %>% mutate(homicidio = if_else(AP6_19== 1, 1, 0, missing = 0))
+tpv2<-  tpv2 %>% mutate(asalto = if_else(AP7_3_05== 1, 1, 0, missing = 0))
+tpv2<-  tpv2 %>% mutate(menor.edad = if_else(EDAD<18, 1, 0, missing = 0))
+
+
+
+
+```
+
+
+
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
+design = svydesign(id=~UPM_DIS,strata=~EST_DIS, weights=~tpv2$FAC_ELE, data=tpv2)
+
+
+
+#Si quisieramos hacer un análisis del total de delitos, tomamos los totales para esto
+total.edo            <- svyby(~sufrio.delitos, by=tpv2$ENT, design=design, svytotal)
+total.edo.coche      <- svyby(~robo.coche, by=tpv2$ENT, design=design, svytotal)
+total.edo.casa       <- svyby(~robo.casa, by=tpv2$ENT, design=design, svytotal)
+total.edo.secuestro  <- svyby(~secuestro, by=tpv2$ENT, design=design, svytotal)
+total.edo.desp       <- svyby(~desaparicion, by=tpv2$ENT, design=design, svytotal)
+total.edo.homicidio  <- svyby(~homicidio, by=tpv2$ENT, design=design, svytotal)
+total.edo.asalto     <- svyby(~asalto, by=tpv2$ENT, design=design, svytotal)
+
+
+
+#Intervalos de Confianza
+total.edo$intervalo<-confint(total.edo)
+aux.int <- as.data.frame(total.edo$intervalo)
+total.edo<-cbind(total.edo, aux.int)
+total.edo$intervalo<-NULL
+
+
+
+total.edo.coche$intervalo<-confint(total.edo.coche)
+aux.int <- as.data.frame(total.edo.coche$intervalo)
+total.edo.coche<-cbind(total.edo.coche, aux.int)
+total.edo.coche$intervalo<-NULL
+
+
+
+total.edo.casa$intervalo<-confint(total.edo.casa)
+aux.int <- as.data.frame(total.edo.casa$intervalo)
+total.edo.casa<-cbind(total.edo.casa, aux.int)
+total.edo.casa$intervalo<-NULL
+
+
+
+total.edo.secuestro$intervalo<-confint(total.edo.secuestro)
+aux.int <- as.data.frame(total.edo.secuestro$intervalo)
+total.edo.secuestro<-cbind(total.edo.secuestro, aux.int)
+total.edo.secuestro$intervalo<-NULL
+
+
+
+total.edo.homicidio$intervalo<-confint(total.edo.homicidio)
+aux.int <- as.data.frame(total.edo.homicidio$intervalo)
+total.edo.homicidio<-cbind(total.edo.homicidio, aux.int)
+total.edo.homicidio$intervalo<-NULL
+
+
+
+total.edo.desp$intervalo<-confint(total.edo.desp)
+aux.int <- as.data.frame(total.edo.desp$intervalo)
+total.edo.desp<-cbind(total.edo.desp, aux.int)
+total.edo.desp$intervalo<-NULL
+
+
+
+total.edo.asalto$intervalo<-confint(total.edo.asalto)
+aux.int <- as.data.frame(total.edo.asalto$intervalo)
+total.edo.asalto<-cbind(total.edo.asalto, aux.int)
+total.edo.asalto$intervalo<-NULL
+
+
+```
+
+
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
+#Genero Variable Auxiliar por tipo de Delito
+total.edo$tipo<-"Total de Delitos"
+total.edo.coche$tipo<- "Robo Coche"
+total.edo.casa$tipo<- "Robo Casa"
+total.edo.secuestro$tipo<- "Secuestro"
+total.edo.desp$tipo<- "Desaparicion"
+total.edo.homicidio$tipo<- "Homicidio"
+total.edo.asalto$tipo<- "Asalto"
+
+
+
+#Genero Variable Tamaño Poblacional 
+total.edo$poblacion <- c(749982,400161,417416,608479,199224,532553,1164477,
+                         390348,1827868,243886,364439,137927,361593,677104,
+                         427263,415933)
+total.edo.coche$poblacion<- c(749982,400161,417416,608479,199224,532553,
+                              1164477,390348,1827868,243886,364439,137927,
+                              361593,677104,427263,415933)
+total.edo.casa$poblacion<- c(749982,400161,417416,608479,199224,532553,1164477,
+                             390348,1827868,243886,364439,137927,361593,677104,
+                             427263,415933)
+total.edo.secuestro$poblacion<-c(749982,400161,417416,608479,199224,532553,
+                                 1164477,390348,1827868,243886,364439,137927,
+                                 361593,677104,427263,415933)
+total.edo.desp$poblacion<- c(749982,400161,417416,608479,199224,532553,1164477,
+                             390348,1827868,243886,364439,137927,361593,677104,
+                             427263,415933)
+total.edo.homicidio$poblacion<- c(749982,400161,417416,608479,199224,532553,
+                                  1164477,390348,1827868,243886,
+                                  364439,137927,361593,677104,427263,415933)
+total.edo.asalto$poblacion<- c(749982,400161,417416,608479,199224,532553,
+                               1164477,390348,1827868,243886,364439,137927,
+                               361593,677104,427263,415933)
+
+
+
+#Renombro mi variable para poder tener todos en un data.frame
+colnames(total.edo)[2]<-"Conteo"
+colnames(total.edo.coche)[2]<-"Conteo"
+colnames(total.edo.casa)[2]<-"Conteo"
+colnames(total.edo.secuestro)[2]<-"Conteo"
+colnames(total.edo.desp)[2]<-"Conteo"
+colnames(total.edo.homicidio)[2]<-"Conteo"
+colnames(total.edo.asalto)[2]<-"Conteo"
+
+```
+
+### Mapa de calor para tipo de delito por delegación
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
+#Realizamos un mapa de calor por el tipo de delito y la delegación
+aux_heatmap <-rbind(total.edo.coche,total.edo.casa,total.edo.secuestro,total.edo.homicidio)
+
+
+
+color_palette <- colorRampPalette(c("#ffeda0","#feb24c","#f03b20"))
+
+
+
+ggplot(aux_heatmap) +  
+  geom_tile(aes(tipo, 
+                by, 
+                fill= Conteo)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) +
+  labs(
+    y="Delegacion", 
+    x="Tipo de Delito", 
+    title="Criminalidad por Delegacion y Tipo de Delito CDMX") +
+  theme(axis.text=element_text(size=7), 
+        axis.title=element_text(size=10,face="bold")) +
+  scale_fill_gradient(
+    name = "Conteo", 
+    low = "#ffeda0",
+    high = "#f03b20",
+    space = "Lab",
+    guide = "colourbar"
+  )
+
+
+```
+
+## Estimación con la población total
+
+
+### Proporción de delitos en la población
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
+total.edo$proporcion<- total.edo$Conteo/total.edo$poblacion
+total.edo.coche$proporcion<- total.edo.coche$Conteo/total.edo.coche$poblacion
+total.edo.casa$proporcion <- total.edo.casa$Conteo/total.edo.casa$poblacion
+total.edo.asalto$proporcion<- total.edo.asalto$Conteo/total.edo.asalto$poblacion
+total.edo.homicidio$proporcion<- total.edo.homicidio$Conteo/total.edo.homicidio$poblacion
+total.edo.secuestro$proporcion<- total.edo.secuestro$Conteo/total.edo.secuestro$poblacion
+total.edo.desp$proporcion<- total.edo.desp$Conteo/total.edo.desp$poblacion
+
+
+
+aux_total<- rbind(total.edo, total.edo.coche, total.edo.casa,total.edo.desp,total.edo.homicidio,total.edo.secuestro, total.edo.asalto)
+
+
+```
+
+Generamos tabla:
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
+
+aux_total[,-c(1,6)] <-round(aux_total[,-c(1,6)],2) #the "-1" excludes column 1
+
+knitr::kable(aux_total, format="markdown")
+```
+
+Graficamos los delitos por delegación:
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
+#Plot
+ggplot(aux_total)+ 
+  labs(x = "Alcaldía",
+       y = " Tipo",
+       title="Densidad Poblacional Delito") + 
+  geom_jitter(aes(by, tipo, size=proporcion)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5),
+        axis.text=element_text(size=7)) 
+```
+
+### Análisis de las proporciones por tipo de delito
+
+```{r,tidy=TRUE, message=FALSE, warning=FALSE}
+ratio_asaltos<-svyratio(~asalto,~sufrio.delitos,design)
+ci_asaltos<-confint(ratio_asaltos)
+ratio_asaltos<-as.numeric(ratio_asaltos)
+
+
+
+ratio_homicidios<-svyratio(~homicidio,~sufrio.delitos,design)
+ci_homicidio<-confint(ratio_homicidios)
+ratio_homicidios<-as.numeric(ratio_homicidios)
+
+
+
+ratio_coche<-svyratio(~robo.coche,~sufrio.delitos,design)
+ci_coche<-confint(ratio_coche)
+ratio_coche<-as.numeric(ratio_coche)
+
+
+
+ratio_casa<-svyratio(~robo.casa, ~sufrio.delitos,design)
+ci_casa<-confint(ratio_casa)
+ratio_casa<-as.numeric(ratio_casa)
+
+
+
+ratio_secuestro<-svyratio(~secuestro, ~sufrio.delitos, design)
+ci_secuestro<-confint(ratio_secuestro)
+ratio_secuestro<-as.numeric(ratio_secuestro)
+
+ratio_desp<-svyratio(~desaparicion, ~sufrio.delitos, design)
+ci_desp<-confint(ratio_desp)
+ratio_desp<-as.numeric(ratio_desp)
+
+
+
+prop_names<-c("Proporción Asalto", "Proporción Homicidios", "Proporción Robo Coches", "Proporción Robo Casa", "Proporción Secuestro", "Proporción Desaparición")
+intervalos<-as.data.frame(rbind(ci_asaltos,ci_homicidio,ci_coche,ci_casa,ci_secuestro, ci_desp))
+
+
+
+aux_ratio<-cbind(prop_names, intervalos)
+
+#Tabla:
+knitr::kable(aux_ratio, format="markdown")
+
+
+```
+
+
+## Resultados
+
+### Estimador de la proporción de delitos denunciados   
+
+El objetivo de este estudio fue medir el nivel de confianza que tienen los ciudadanos en los organismos de carácter público encargados de la impartición de justicia, en este caso el Ministerio Público, con el fin de concientizar a la autoridad e incentivar cambios estructurales que faciliten los procesos de denuncia. Habiendo dicho esto, y basándonos en la estimación obtenida, queda claro que la confianza de los ciudadanos en la capacidad del MP para atender y resolver sus demandas es extremadamente baja. Para las autoridades competentes esto es una llamada de atención y, como mínimo, se esperaría que este tema se erija como asunto crucial en su agenda política.
+
+
+### Estimación de la media y varianza del momento del día en que fue cometido un delito    
+
+Previo a realizar la estimación de la media y la varianza, una conjetura era que quizá la probabilidad de ser víctima de un delito aumentaba conforme avanzaba el día y llegaba a su pico ya entrada la noche. Sin embargo, los resultados cuentan otra historia, puesto que la estimación de la media y la varianza reflejan un escenario en donde la distribición de los delitos a lo largo del día es bastante uniforme. De ser cierta la conjetura previamente mencionada, uno esperaria ver en los resultados una estimación de la media mucho más inclinada hacia el 4, en lugar de estar prácticamente centrada.   
+
+### Análisis por alcaldía    
+
+1.	Si hacemos un análisis por alcaldías en la CDMX encontramos que a pesar de que las alcaldías con mayor incidencia de criminalidad son la alcaldía de Iztapalapa y de Gustavo A. Madero. Sin embargo, cuando ponderamos de acuerdo con la población por delegación encontramos que la delegación de Álvaro Obregón tiene una alta incidencia de crímenes. Ahora bien, la CDMX es la entidad federativa con el mayor número de años escolaridad promedio de acuerdo con el INEGI. Sin embargo, precisamente las delegaciones de Iztapalapa y Gustavo A. Madero son las que presentan el menor número de años de escolaridad de acuerdo con cifras del INEGI lo cual puede ayudarnos a explicar las cifras de alta criminalidad.
+
+2.	 Los asaltos son el delito más frecuente entre los habitantes de la CDMX. La causalidad no es clara, lo que podemos suponer es que de los delitos presentados el asalto en la modalidad sin violencia tiene el menor castigo.  De igual forma, podemos suponer que el aumento en el tráfico puede tener como consecuencia un aumento en los asaltos a coches como lo indican las cifras del Portal de Datos Abiertos de CDMX. 
+
+3.	Finalmente, notemos que el conteo de desaparición no es tan frecuente en ninguna alcaldía de la Ciudad de México. La OCDE sostiene que las desapariciones son más frecuentes en los estados ligados al narcotráfico, de ahí que sea menos frecuente el delito de desaparición.
 
 
 ## Referencias:   

@@ -1,0 +1,14 @@
+---
+title: "Conclusiones Manolo"
+output: html_document
+---
+### Interpretación del mapa de calor
+Este esquema visual facilita la detección de patrones respecto al tiempo para cada uno de los delitos categorizados en la base de datos. Como primera observación, se puede notar que los delitos de Robo Parcial de Vehículo, Vandalismo y Traspaso de Propiedad son mucho más frecuentes en altas horas de la noche, mientras que en la mañana riesgo de ser víctima de alguno de estos delitos se reduce drásticamente. Otro delito que presenta mayor frecuencia en la noche y que merece especial mención es el delito de violación. Por otro lado, los delitos de la mitad superior del mapa de calor presentan una mayor frecuencia en la tarde, especialemtne los delitos de Fraude Bancario, Fraude al Consumidor, Amenaza y Hostigamiento Sexual.
+
+
+### Conclusión del estimador de la proporción de delitos denunciados
+El objetivo de este estudio fue medir el nivel de confianza que tienen los ciudadanos en los organismos de carácter público encargados de la impartición de justicia, en este caso el Ministerio Público, con el fin de concientizar a la autoridad e incentivar cambios estructurales que faciliten los procesos de denuncia. Habiendo dicho esto, y basándonos en la estimación obtenida, queda claro que la confianza de los ciudadanos en la capacidad del MP para atender y resolver sus demandas es extremadamente baja. Para las autoridades competentes esto es una llamada de atención y, como mínimo, se esperaría que este tema se erija como asunto crucial en su agenda política.
+
+
+### Conclusión de la estimación de la media y varianza del momento del día en que fue cometido un delito
+Previo a realizar la estimación de la media y la varianza, una conjetura era que quizá la probabilidad de ser víctima de un delito aumentaba conforme avanzaba el día y llegaba a su pico ya entrada la noche. Sin embargo, los resultados cuentan otra historia, puesto que la estimación de la media y la varianza reflejan un escenario en donde la distribición de los delitos a lo largo del día es bastante uniforme. De ser cierta la conjetura previamente mencionada, uno esperaria ver en los resultados una estimación de la media mucho más inclinada hacia el 4, en lugar de estar prácticamente centrada.   

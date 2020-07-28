@@ -180,11 +180,11 @@ $$n = \frac{(Z^2(1-p)DEFF)}{(r^2 p (1-t))}  $$
 
  Donde:   
  
- * Z es el valor de la norma,
- * DEFF es el cociente de la varianza del diseño utilizado entre la varianza obtenida considerando un MAS 
- * t es la tasa de no respuesta
- * r es el error relativo
- * p es la proporción muestreada
+ * Z es el valor de la normal,
+ * DEFF es el cociente de la varianza del diseño utilizado entre la varianza obtenida considerando un MAS basado en encuestas de años anteriores.
+ * t es la tasa máxima esperada de no respuesta.
+ * r es el error relativo.
+ * p es la estimación de la proporción de interés
  
 El INEGI sugiere los siguientes parámetros:   
 
@@ -194,7 +194,7 @@ El INEGI sugiere los siguientes parámetros:
 * DEFF = 0.07635
 * I.C. de 90% ($\alpha = .1$)
 
-
+Por lo tanto:
 
 ```{r,tidy=TRUE, message=FALSE, warning=FALSE}
 
@@ -217,33 +217,6 @@ paste0("n= ",n)
 
 ```
 Vemos que la $n$ que obtuvimos es consistente con la encuesta ya que se encuestaron 102,043 viviendas. 
-
-Ahora validémosla también mediante el método visto en clase:
-Recordemos que podemos estimar la $n$ mediante:
-
-$$n =  \left \lceil{\frac{m}{1+\frac{m-1}{N}}}\right \rceil $$
-Donde:
-* $m = \frac{1}{4} Z_{\alpha / 2}^{2}$   
-* Según Eurostat, la población total de México ($N$) es de 126,200,000
-* Utilizaremos $\epsilon = .05$
-* consistentes con lo sugerido por el INEGI, utilizaremos $\alpha = .1$
-
- Por lo tanto:
- 
-```{r,tidy=TRUE,message=FALSE,warning=FALSE}
-
-
-n <- ceiling((qnorm(0.95)*sqrt(10000)*126200000)^2/(100^2 + (qnorm(0.95)^2*10000*126200000)))
-
-
-print(paste0("El tamaño de muestra es ", n))
-
-
-```
- 
-
-
-Explicar como calcula el DEFF
 
 
 
@@ -283,11 +256,13 @@ ggplot(df_1,aes(x=Sexo,y=Conteo_de_delitos,fill=Sexo))+
   )
 
 ```
-Desafortunadamente, son más mujeres las que son víctimas de delitos. 
+Desafortunadamente, las mujeres parecen ser un grupo más vulnerable a ser víctimas de delitos.
 
 
 
 ### Víctimas de delitos por edad
+Veamos ahora que edad tenían las personas que han sido víctima de algún tipo de delito en el país.
+
 ```{r,tidy=TRUE, message=FALSE, warning=FALSE}
 delitos.edad <- df %>% 
   filter(sufrio.delitos == 1) %>%
@@ -314,8 +289,7 @@ no.especificada <- delitos.edad %>%
 paste0("",no.especificada["n"]," Personas decidieron no especificar su edad.") 
 
 ```
-
-Parece ser que los que más riesgo corren de ser víctima de algún delito son los adultos jóvenes de entre 30 y 48 años. 
+Recordemos que nuestra base de datos solo toma en cuenta a personas mayores de edad. Es decir, personas de 18 años en adelante. Vemos un claro sesgo de la gráfica hacia la izquierda. Parece ser que los que más riesgo corren de ser víctima de algún delito son los adultos jóvenes de entre 30 y 48 años. Lo cual tiene sentido. Es en esta edad dónde la población es más económicamente activa y por lo tanto, tiene más ingreso. Además es un rango de edad en que se está constantemente en movimiento fuera de casa. Por lo tanto, se está más tiempo expuesto a ser víctima de un delito.
 
 
 ### Cantidad de robos a casa por estado.
@@ -338,7 +312,7 @@ p2 <- ggplot(robos.casa)+
 p2
 
 ```
-Parece ser que el Norte del país es altamente inseguro ya que Estados como Chihuahua, Sinaloa, Tamaulipas y Colima presentan conteos altos de homicidios. Sin embargo es en Guerrero donde más homicidios se registran.
+Parece ser que el Norte del país es altamente inseguro ya que Estados como Chihuahua, Sinaloa, Tamaulipas y Colima presentan conteos altos de homicidios. El problema de narcotráfico sin duda es factor en estos datos. Sin embargo es en Guerrero (un estado al sur del país) donde más homicidios se registran.
 
 ### Homicidios vs Asaltos
 A continuación presentaremos una visualización muy útil para evaluar riesgo de asalto y homicidio. 
@@ -484,7 +458,6 @@ print(confint(p_gorro))
 
 ```
 
-El objetivo de este estudio fue medir el nivel de confianza que tienen los ciudadanos en los organismos de carácter público encargados de la impartición de justicia, en este caso el Ministerio Público, con el fin de concientizar a la autoridad e incentivar cambios estructurales que faciliten los procesos de denuncia. Habiendo dicho esto, y basándonos en la estimación obtenida, queda claro que la confianza de los ciudadanos en la capacidad del MP para atender y resolver sus demandas es extremadamente baja. Para las autoridades competentes esto es una llamada de atención y, como mínimo, se esperaría que este tema se erija como asunto crucial en su agenda política.
 
 
 ### ESTIMACIÓN DE LA MEDIA Y VARIANZA DEL MOMENTO DEL DÍA EN QUE FUE COMETIDO EL DELITO
@@ -540,7 +513,7 @@ print(var_gorro)
 Previo a realizar la estimación de la media y la varianza, una conjetura era que quizá la probabilidad de ser víctima de un delito aumentaba conforme avanzaba el día y llegaba a su pico ya entrada la noche. Sin embargo, los resultados cuentan otra historia, puesto que la estimación de la media y la varianza reflejan un escenario en donde la distribición de los delitos a lo largo del día es bastante uniforme. De ser cierta la conjetura previamente mencionada, uno esperaria ver en los resultados una estimación de la media mucho más inclinada hacia el 4, en lugar de estar prácticamente centrada.   
 
 ## Estimacion del total de delitos
-Elección de CDMX y calibramos por municipio:
+
 
 Al sufrir la base de datos anterior muchas modificaciones, fue necesario leerla de nuevo y limpirla. 
 

@@ -460,7 +460,7 @@ print(confint(p_gorro))
 
 
 
-### ESTIMACIÓN DE LA MEDIA Y VARIANZA DEL MOMENTO DEL DÍA EN QUE FUE COMETIDO EL DELITO
+### ESTIMACIÓN DE LA PROPORCIÓN DE DELITOS QUE OCURREN EN EL DÍA Y LA NOCHE
 
 Saber la distribución de la ocurrencia de los delitos a lo largo del día es,
 sin lugar a dudas, información crucial para todo aquél que pretenda implementar 
@@ -468,11 +468,15 @@ medidas de seguridad de manera eficiente. En  nuestra base de datos, la variable
 BP1_4 indica el momento del día en que ocurrió el delito. Esta variable puede 
 toma valores de la siguiente forma: 
 
-*Toma el valor de 1 si el delito ocurrió entre las 6:01 y 12:00hrs
-*Toma el valor de 2 si el delito ocurrió entre las 2:01 y 18:00hrs
-*Toma el valor de 3 si el delito ocurrió entre las 18:01 y 24:00hrs
-*Toma el valor de 4 si el delito ocurrió entre las 00:01 y 6:00 hrs
-*Toma el valor de 9 si la hora no fue especificada   
+* Toma el valor de 1 si el delito ocurrió entre las 6:01 y 12:00hrs
+
+* Toma el valor de 2 si el delito ocurrió entre las 2:01 y 18:00hrs
+
+* Toma el valor de 3 si el delito ocurrió entre las 18:01 y 24:00hrs
+
+* Toma el valor de 4 si el delito ocurrió entre las 00:01 y 6:00 hrs
+
+* Toma el valor de 9 si la hora no fue especificada   
 
 
 
@@ -482,6 +486,13 @@ no fue especificada.
  
 ```{r tidy=TRUE, message=FALSE, warning=FALSE}
 TMod_Vic       <- TMod_Vic %>% filter(BP1_4 != 9)
+
+#Crearemos una variable indicadora llamada noche_dia que adquiera el valor de 1
+#si el delito fue cometido en la noche y 0 si el delito fue cometido en el dia.
+
+TMod_Vic       <- TMod_Vic %>% 
+  mutate( Noche_Dia = ifelse(BP1_4 > 2, 1, 0)) %>%
+  mutate( Dia_Noche = ifelse(BP1_4 > 2, 0, 1))
 
 #Redefinimos el diseño en virtud de que la base de datos ha sido modificada.
 diseno         <- svydesign(id = ~id,
@@ -493,24 +504,24 @@ diseno         <- svydesign(id = ~id,
 
 ```
 
-Ahora podemos estimar la media y varianza  poblacional de esta variable:
+Ahora podemos estimar la proporción:
 
 ```{r tidy=TRUE, message=FALSE, warning=FALSE}
 #
-mu_gorro       <- svymean(~BP1_4, diseno)
-var_gorro      <- svyvar(~BP1_4, diseno)    
+pnoche       <- svymean(~Noche_Dia, diseno)
+pdia         <- svymean(~Dia_Noche, diseno)  
 
 #Y sus respectivos intervalos de confianza están dados por:
-ic_mu <- confint(mu_gorro)
-ic_var <- confint(var_gorro)
-print("Intervalo de confianza del estimador de Mu gorro:")
-print(ic_mu)
-print("Intervalo de confianza para el estimador de la varianza:")
-print(var_gorro)
+ic_pnoche <- confint(pnoche)
+ic_pdia   <- confint(pdia)
+print("Intervalo de confianza de la estimción de pnoche:")
+print(ic_pnoche)
+print("Intervalo de confianza de le estimación de pdia:")
+print(ic_pdia)
 
 ```
 
-Previo a realizar la estimación de la media y la varianza, una conjetura era que quizá la probabilidad de ser víctima de un delito aumentaba conforme avanzaba el día y llegaba a su pico ya entrada la noche. Sin embargo, los resultados cuentan otra historia, puesto que la estimación de la media y la varianza reflejan un escenario en donde la distribición de los delitos a lo largo del día es bastante uniforme. De ser cierta la conjetura previamente mencionada, uno esperaria ver en los resultados una estimación de la media mucho más inclinada hacia el 4, en lugar de estar prácticamente centrada.   
+Previo a realizar la estimación de la proporción de delitos que ocurren en el día y la noche, una conjetura era que quizá la probabilidad de ser víctima de un delito aumentaba conforme avanzaba el día y llegaba a su pico ya entrada la noche. Sin embargo, los resultados cuentan otra historia, puesto que la estimación de las proporciones refflejan un escenario en donde la distribición de los delitos a lo largo del día presenta mayor densidad cuando aun hay luz del sol. Esto lo podemos afirmar con un nivel de confianza bastante alto puesto que los intervalos de confianza para los parámetros pnoche y pdia ni siquiera se intersectan y cada uno de ellos está a nivel 95%.    
 
 ## Estimacion del total de delitos
 
